@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
-import '../constants.dart';
 
 class MediaControl extends StatefulWidget {
   final dynamic data;
