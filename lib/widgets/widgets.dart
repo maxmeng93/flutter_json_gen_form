@@ -4,4 +4,6 @@ export './inner_wrap.dart';
 export './inner_input.dart';
 export './single_picker.dart'
     show showSinglePicker, SinglePickerData, SinglePickerSelectData;
-export './media_picker.dart' show showSelectMultimedia, MultimediaTypeEnum;
+export './media_picker.dart'
+    show showSelectMultimedia, MultimediaTypeEnum, XFile;
+export './grid.dart';
