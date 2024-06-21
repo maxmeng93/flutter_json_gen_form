@@ -6,12 +6,14 @@ class JsonGenForm extends StatefulWidget {
   final dynamic config;
   final double groupSpace;
   final double fieldSpace;
+  final Future<String> Function(String filePath)? uploadFile;
 
   const JsonGenForm({
     super.key,
     this.config,
     this.groupSpace = 10,
     this.fieldSpace = 10,
+    this.uploadFile,
   });
 
   @override
@@ -126,7 +128,11 @@ class JsonGenFormState extends State<JsonGenForm> {
       case 'datetime':
         return Text('日期时间选择器');
       case 'media':
-        return MediaControl(data: config, onChanged: _onChanged);
+        return MediaControl(
+          data: config,
+          onChanged: _onChanged,
+          uploadFile: widget.uploadFile,
+        );
       default:
         return Container();
     }

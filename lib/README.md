@@ -84,11 +84,12 @@
 | 通用参数    | -  | -         | -       | -    |
 
 ### media 多媒体上传
-| 字段      | 描述 | 类型        | 默认值     | 必填   |
-|---------|----|-----------|---------|------|
-| type    | 类型 | String    | 'media' | true |
-| multiple | 是否多选 | bool      | false   | -  |
-| 通用参数    | -  | -         | -       | -    |
+| 字段        | 描述                 | 类型     | 默认值     | 必填   |
+|-----------|--------------------|--------|---------|------|
+| type      | 类型                 | String | 'media' | true |
+| mediaType | 媒体类型(media、image、video) | String | 'media' | -    |
+| multiple  | 是否多选               | bool   | false   | -    |
+| 通用参数      | -                  | -      | -       | -    |
 
 #### ios配置 info.plist
 ```

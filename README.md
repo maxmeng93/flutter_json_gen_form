@@ -1,39 +1,155 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# 表单生成
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+## 通用参数
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+除 `group` 外，其他类型都有以下通用参数
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+| 字段        | 描述     | 类型    | 默认值 | 必填 |
+| ----------- | -------- | ------- | ------ | ---- |
+| type        | 类型     | String  | ''     | true |
+| field       | 字段名   | String  | ''     | true |
+| label       | 标签     | String  | -      | -    |
+| hiddenLabel | 隐藏标签 | bool    | false  | -    |
+| value       | 默认值   | dynamic | -      | -    |
+| disabled    | 是否禁用 | bool    | false  | -    |
+| readonly    | 是否只读 | bool    | false  | -    |
+| rules       | 校验规则 | List    | []     | -    |
 
-## Features
+## 表单类型
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+### group 分组
 
-## Getting started
+| 字段        | 描述     | 类型      | 默认值  | 必填 |
+| ----------- | -------- | --------- | ------- | ---- |
+| type        | 类型     | String    | 'group' | true |
+| field       | 字段名   | String    | ''      | -    |
+| label       | 标签     | String    | ''      | -    |
+| hiddenLabel | 隐藏标签 | bool      | ''      | -    |
+| children    | 子表单   | List<Map> | []      | -    |
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+### text 文本框
 
-## Usage
+| 字段        | 描述 | 类型   | 默认值 | 必填 |
+| ----------- | ---- | ------ | ------ | ---- |
+| type        | 类型 | String | 'text' | true |
+| placeholder | 提示 | String | -      | -    |
+| 通用参数    | -    | -      | -      | -    |
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+### password 密码框
 
-```dart
-const like = 'sample';
+| 字段        | 描述 | 类型   | 默认值     | 必填 |
+| ----------- | ---- | ------ | ---------- | ---- |
+| type        | 类型 | String | 'password' | true |
+| placeholder | 提示 | String | -          | -    |
+| 通用参数    | -    | -      | -          | -    |
+
+### textArea 多行文本框
+
+| 字段        | 描述 | 类型   | 默认值     | 必填 |
+| ----------- | ---- | ------ | ---------- | ---- |
+| type        | 类型 | String | 'textArea' | true |
+| placeholder | 提示 | String | -          | -    |
+| 通用参数    | -    | -      | -          | -    |
+
+### number 数字
+
+| 字段        | 描述 | 类型   | 默认值   | 必填 |
+| ----------- | ---- | ------ | -------- | ---- |
+| type        | 类型 | String | 'number' | true |
+| placeholder | 提示 | String | -        | -    |
+| 通用参数    | -    | -      | -        | -    |
+
+### radio 单选框
+
+| 字段     | 描述 | 类型      | 默认值  | 必填 |
+| -------- | ---- | --------- | ------- | ---- |
+| type     | 类型 | String    | 'radio' | true |
+| options  | 选项 | List<Map> | []      | -    |
+| 通用参数 | -    | -         | -       | -    |
+
+### checkbox 复选框
+
+| 字段     | 描述 | 类型      | 默认值     | 必填 |
+| -------- | ---- | --------- | ---------- | ---- |
+| type     | 类型 | String    | 'checkbox' | true |
+| options  | 选项 | List<Map> | []         | -    |
+| 通用参数 | -    | -         | -          | -    |
+
+### select 下拉框
+
+| 字段     | 描述     | 类型      | 默认值   | 必填 |
+| -------- | -------- | --------- | -------- | ---- |
+| type     | 类型     | String    | 'select' | true |
+| options  | 选项     | List<Map> | []       | -    |
+| multiple | 是否多选 | bool      | false    | -    |
+| 通用参数 | -        | -         | -        | -    |
+
+### switch 开关
+
+| 字段     | 描述 | 类型   | 默认值   | 必填 |
+| -------- | ---- | ------ | -------- | ---- |
+| type     | 类型 | String | 'switch' | true |
+| 通用参数 | -    | -      | -        | -    |
+
+### media 多媒体上传
+
+| 字段      | 描述                          | 类型   | 默认值  | 必填 |
+| --------- | ----------------------------- | ------ | ------- | ---- |
+| type      | 类型                          | String | 'media' | true |
+| mediaType | 媒体类型(media、image、video) | String | 'media' | -    |
+| multiple  | 是否多选                      | bool   | false   | -    |
+| 通用参数  | -                             | -      | -       | -    |
+
+#### ios 配置 info.plist
+
+```
+<key>NSCameraUsageDescription</key>
+<string>需要摄像头拍照或扫码</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>需要从图库选择照片或视频</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>录制视频需要访问麦克风</string>
 ```
 
-## Additional information
+#### android 配置 AndroidManifest.xml
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```
+<uses-permission android:name="android.permission.CAMERA" />
+```
+
+### date 日期选择
+
+| 字段 | 描述 | 类型   | 默认值 | 必填 |
+| ---- | ---- | ------ | ------ | ---- |
+| type | 类型 | String | 'date' | true |
+|      |      |        |        |      |
+
+### time 时间选择
+
+| 字段 | 描述 | 类型   | 默认值 | 必填 |
+| ---- | ---- | ------ | ------ | ---- |
+| type | 类型 | String | 'time' | true |
+|      |      |        |        |      |
+
+### datetime 日期时间选择
+
+| 字段 | 描述 | 类型   | 默认值     | 必填 |
+| ---- | ---- | ------ | ---------- | ---- |
+| type | 类型 | String | 'datetime' | true |
+|      |      |        |            |      |
+
+## 验证规则
+
+- required 必填
+- type 快捷校验类型
+  - email 邮箱
+  - url 网址
+- min string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
+- max string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
+- len string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
+- pattern 正则校验
+- message 错误提示信息
+
+## 依赖项
+
+- image_picker

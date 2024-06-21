@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import '../widgets/widgets.dart';
@@ -8,11 +7,13 @@ import '../validator/validator.dart';
 class MediaControl extends StatefulWidget {
   final dynamic data;
   final void Function(String field, dynamic value) onChanged;
+  final Future<String> Function(String filePath)? uploadFile;
 
   const MediaControl({
     super.key,
     required this.data,
     required this.onChanged,
+    this.uploadFile,
   });
 
   @override
@@ -23,6 +24,7 @@ class _MediaControlState extends State<MediaControl> {
   late String field;
   String? label;
   dynamic initialValue;
+  late String mediaType;
   bool required = false;
   bool readonly = false;
   bool disabled = false;
@@ -51,37 +53,29 @@ class _MediaControlState extends State<MediaControl> {
       field = data['field'];
       label = data['label'];
       initialValue = data['value'];
+      mediaType = data['mediaType'] ?? 'media';
     });
   }
 
-  _uploadFile(XFile file) async {
-    // var f = File(file.path);
-    // var stat = f.statSync();
-
-    final extension = file.name.split('.').last;
-    final data = await MultipartFile.fromFile(file.path);
-
-    // print('file: ${file.path}');
-
-    // try {
-    //   var res = await uploadFiles({
-    //     'upload_file': data,
-    //   }, {
-    //     'file_extension': '.$extension',
-    //     'category': uploadCategory,
-    //   });
-    //   String url = res.data['data']['url'];
-    //
-    //   setState(() {
-    //     _files[index] = UnitFileLink(
-    //       fileLink: url,
-    //       fileMark: _files[index].fileMark,
-    //       fileType: _files[index].fileType,
-    //     );
-    //   });
-    // } catch (e) {
-    //   debugPrint('上传文件失败');
-    // }
+  Future<void> _uploadFile(FormFieldState state, XFile file) async {
+    if (widget.uploadFile != null) {
+      final url = await widget.uploadFile!(file.path);
+      if (multiple) {
+        List<String> all = state.value ?? [];
+        // 遍历all，根据file.path判断是否已经存在，如果存在则替换
+        for (var i = 0; i < all.length; i++) {
+          if (all[i] == file.path) {
+            all[i] = url;
+            break;
+          }
+        }
+        state.didChange(all);
+        widget.onChanged(field, all);
+      } else {
+        state.didChange(url);
+        widget.onChanged(field, url);
+      }
+    }
   }
 
   @override
@@ -129,14 +123,26 @@ class _MediaControlState extends State<MediaControl> {
   }
 
   Widget _addMedia(FormFieldState state) {
+    MultimediaTypeEnum type = MultimediaTypeEnum.media;
+    for (var item in MultimediaTypeEnum.values) {
+      if (item.name == mediaType) {
+        type = item;
+        break;
+      }
+    }
+
     return GestureDetector(
       onTap: () {
-        showSelectMultimedia(context, isMultiple: multiple).then((files) {
+        showSelectMultimedia(
+          context,
+          type: type,
+          isMultiple: multiple,
+        ).then((files) {
           if (files != null && files.isNotEmpty) {
             List<String> paths = [];
             for (var file in files) {
               paths.add(file.path);
-              _uploadFile(file);
+              _uploadFile(state, file);
             }
 
             if (multiple) {
@@ -163,6 +169,10 @@ class _MediaControlState extends State<MediaControl> {
   }
 
   Widget _mediaItem(FormFieldState state, String url) {
+    final extension = url.split('.').last;
+    List<String> imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+    bool isImage = imageExtensions.contains(extension);
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -172,7 +182,7 @@ class _MediaControlState extends State<MediaControl> {
             color: Colors.black12,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: _renderImage(url),
+          child: isImage ? _renderImage(url) : _renderVideo(url),
         ),
         Positioned(
           top: -5,
@@ -242,21 +252,21 @@ class _MediaControlState extends State<MediaControl> {
   }
 
   _renderVideo(String url) {
-    bool isNetwork = url.startsWith('http');
-
-    return isNetwork
-        ? Image.network(
-            url,
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-          )
-        : Image.file(
-            File(url),
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-          );
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return VideoPlayerRouteWrapper(
+                url: url,
+              );
+            },
+          ),
+        );
+      },
+      child: AbsorbPointer(child: VideoPlayer(uri: url)),
+    );
   }
 }
 
@@ -321,6 +331,34 @@ class PhotoViewRouteWrapper extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class VideoPlayerRouteWrapper extends StatelessWidget {
+  final String url;
+  final BoxDecoration? backgroundDecoration;
+  final dynamic minScale;
+  final dynamic maxScale;
+
+  const VideoPlayerRouteWrapper({
+    super.key,
+    required this.url,
+    this.backgroundDecoration,
+    this.minScale,
+    this.maxScale,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: SizedBox(
+          height: 200,
+          child: VideoPlayer(uri: url, autoPlay: true),
+        ),
       ),
     );
   }

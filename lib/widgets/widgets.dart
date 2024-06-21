@@ -7,3 +7,4 @@ export './single_picker.dart'
 export './media_picker.dart'
     show showSelectMultimedia, MultimediaTypeEnum, XFile;
 export './grid.dart';
+export './video_player.dart';

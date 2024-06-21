@@ -14,7 +14,7 @@ class VideoPlayer extends StatefulWidget {
   const VideoPlayer({
     super.key,
     required this.uri,
-    this.autoPlay = true,
+    this.autoPlay = false,
   });
 
   @override
@@ -99,17 +99,6 @@ class _VideoPlayerState extends State<VideoPlayer>
           width: double.infinity,
           child: Stack(
             children: [
-              /// 加载中
-              if (_state == FijkState.initialized ||
-                  _state == FijkState.asyncPreparing)
-                const Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  child: Text('loading...'),
-                ),
-
               /// 播放器异常
               if (_state == FijkState.error)
                 Positioned(
@@ -147,6 +136,32 @@ class _VideoPlayerState extends State<VideoPlayer>
                     ],
                   ),
                 ),
+
+              // 居中显示播放按钮icon
+              Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (_state == FijkState.paused) {
+                        videoPlay();
+                      } else if (_state == FijkState.started) {
+                        videoPause();
+                      }
+                    },
+                    child: Icon(
+                      _state != FijkState.started
+                          ? Icons.play_arrow
+                          : Icons.pause,
+                      size: 50,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         );
