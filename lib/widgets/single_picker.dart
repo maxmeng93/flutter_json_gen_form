@@ -2,25 +2,27 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-Future<SinglePickerSelectData?> showSinglePicker(
+Future showSinglePicker(
   context, {
   String? title,
   String? okText,
   String? cancelText,
-  List<SinglePickerData>? data,
+  List<SinglePickerData>? options,
+  bool? multiple,
   dynamic value,
 }) {
-  return showModalBottomSheet<SinglePickerSelectData?>(
+  return showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
     barrierColor: const Color(0x99000000).withOpacity(0.6),
     builder: (BuildContext context) {
-      return SinglePicker(
+      return PickerWrap(
         title: title,
         okText: okText,
         cancelText: cancelText,
         value: value,
-        data: data,
+        options: options,
+        multiple: multiple,
       );
     },
   );
@@ -33,68 +35,46 @@ class SinglePickerData {
   const SinglePickerData({required this.label, required this.value});
 }
 
-class SinglePickerSelectData {
-  final int? index;
+class PickerWrap extends StatefulWidget {
+  final List<SinglePickerData>? options;
   final dynamic value;
-
-  const SinglePickerSelectData({required this.index, required this.value});
-}
-
-class SinglePicker extends StatefulWidget {
+  final bool? multiple;
   final String? title;
   final String? okText;
   final String? cancelText;
-  final List<SinglePickerData>? data;
-  final dynamic value;
 
-  const SinglePicker({
+  const PickerWrap({
     super.key,
+    this.options,
+    this.value,
+    this.multiple,
     this.title,
     this.okText,
     this.cancelText,
-    this.data = const [],
-    this.value,
   });
 
   @override
-  State<SinglePicker> createState() => _SinglePickerState();
+  State<PickerWrap> createState() => _PickerWrapState();
 }
 
-class _SinglePickerState extends State<SinglePicker> {
-  FixedExtentScrollController controller = FixedExtentScrollController();
-  late List<SinglePickerData> data = [];
-
+class _PickerWrapState extends State<PickerWrap> {
   final double headerHeight = 42;
   final double itemHeight = 34;
-  int? _selectedIndex;
+  dynamic _value;
 
   @override
   void initState() {
     super.initState();
-    initListData();
+    _value = widget.value;
   }
 
-  initListData() {
-    data = widget.data ?? [];
-    if (data.isNotEmpty) {
-      if (widget.value != null) {
-        _selectedIndex = data.indexWhere((item) => item.value == widget.value);
-        if (_selectedIndex == -1) _selectedIndex = 0;
-      } else {
-        _selectedIndex = 0;
-      }
-      if (_selectedIndex != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          controller.jumpToItem(_selectedIndex!);
-        });
-      }
-    }
+  void _onChanged(dynamic value) {
+    _value = value;
   }
 
   @override
   Widget build(BuildContext context) {
     final double height = headerHeight + itemHeight * 7;
-
     return Container(
       height: height,
       color: Colors.white,
@@ -126,12 +106,7 @@ class _SinglePickerState extends State<SinglePicker> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pop(SinglePickerSelectData(
-                      index: _selectedIndex,
-                      value: _selectedIndex != null
-                          ? data[_selectedIndex!].value
-                          : null,
-                    ));
+                    Navigator.of(context).pop(_value);
                   },
                   child: Text(
                     widget.cancelText ?? '确定',
@@ -143,100 +118,249 @@ class _SinglePickerState extends State<SinglePicker> {
           ),
           SizedBox(
             height: itemHeight * 7,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  height: itemHeight,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: Colors.grey.withOpacity(0.5),
-                        width: 0.5,
-                      ),
-                      bottom: BorderSide(
-                        color: Colors.grey.withOpacity(0.5),
-                        width: 0.5,
-                      ),
-                    ),
+            child: widget.multiple == true
+                ? MultipleSinglePicker(
+                    options: widget.options,
+                    value: widget.value,
+                    onChanged: _onChanged,
+                    itemHeight: itemHeight,
+                  )
+                : SinglePicker(
+                    options: widget.options,
+                    value: widget.value,
+                    onChanged: _onChanged,
+                    itemHeight: itemHeight,
                   ),
-                ),
-                Row(
-                  children: [
-                    Expanded(child: buildList()),
-                  ],
-                ),
-                // 蒙层
-                Positioned(
-                  top: 0,
-                  child: IgnorePointer(
-                    ignoring: true,
-                    child: Container(
-                      height: itemHeight * 3,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.white, Colors.white.withOpacity(0)],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  child: IgnorePointer(
-                    ignoring: true,
-                    child: Container(
-                      height: itemHeight * 3,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [Colors.white, Colors.white.withOpacity(0.5)],
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
           ),
         ],
       ),
     );
   }
+}
+
+class SinglePicker extends StatefulWidget {
+  final dynamic value;
+  final List<SinglePickerData>? options;
+  final double itemHeight;
+  final void Function(dynamic value) onChanged;
+
+  const SinglePicker({
+    super.key,
+    required this.onChanged,
+    required this.itemHeight,
+    this.options = const [],
+    this.value,
+  });
+
+  @override
+  State<SinglePicker> createState() => _SinglePickerState();
+}
+
+class _SinglePickerState extends State<SinglePicker> {
+  FixedExtentScrollController controller = FixedExtentScrollController();
+  late List<SinglePickerData> _options = [];
+
+  int? _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    initListData();
+  }
+
+  initListData() {
+    _options = widget.options ?? [];
+    final initialValue = widget.value;
+    if (_options.isNotEmpty) {
+      if (initialValue != null) {
+        _selectedIndex =
+            _options.indexWhere((item) => item.value == initialValue);
+        if (_selectedIndex == -1) _selectedIndex = 0;
+      } else {
+        _selectedIndex = 0;
+      }
+      if (_selectedIndex != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          controller.jumpToItem(_selectedIndex!);
+        });
+      }
+    }
+
+    if (_selectedIndex != null) {
+      widget.onChanged(_options[_selectedIndex!].value);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          height: widget.itemHeight,
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Colors.grey.withOpacity(0.5),
+                width: 0.5,
+              ),
+              bottom: BorderSide(
+                color: Colors.grey.withOpacity(0.5),
+                width: 0.5,
+              ),
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(child: buildList()),
+          ],
+        ),
+        // 蒙层
+        Positioned(
+          top: 0,
+          child: IgnorePointer(
+            ignoring: true,
+            child: Container(
+              height: widget.itemHeight * 3,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.white, Colors.white.withOpacity(0)],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          child: IgnorePointer(
+            ignoring: true,
+            child: Container(
+              height: widget.itemHeight * 3,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [Colors.white, Colors.white.withOpacity(0.5)],
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
 
   Widget buildList() {
-    final items = data;
-
     return ScrollConfiguration(
       behavior: NoWaveBehavior(),
       child: ListWheelScrollView.useDelegate(
         controller: controller,
-        itemExtent: itemHeight,
+        itemExtent: widget.itemHeight,
         physics: const FixedExtentScrollPhysics(),
         onSelectedItemChanged: (int index) {
           setState(() {
             _selectedIndex = index;
+            widget.onChanged(_options[index].value);
           });
         },
         childDelegate: ListWheelChildBuilderDelegate(
-          childCount: items.length,
+          childCount: _options.length,
           builder: (BuildContext context, int index) {
             return SizedBox(
-              height: itemHeight,
+              height: widget.itemHeight,
               child: Center(
                 child: Text(
-                  items[index].label.toString(),
+                  _options[index].label.toString(),
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 16, color: Colors.black),
                 ),
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class MultipleSinglePicker extends StatefulWidget {
+  final dynamic value;
+  final List<SinglePickerData>? options;
+  final double itemHeight;
+  final void Function(dynamic value) onChanged;
+
+  const MultipleSinglePicker({
+    super.key,
+    required this.onChanged,
+    required this.itemHeight,
+    this.options = const [],
+    this.value,
+  });
+
+  @override
+  State<MultipleSinglePicker> createState() => _MultipleSinglePickerState();
+}
+
+class _MultipleSinglePickerState extends State<MultipleSinglePicker> {
+  final List _value = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  void _init() {
+    final value = widget.value;
+    if (value != null) {
+      _value.addAll(value);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: widget.options!.map((item) {
+          return _item(item);
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _item(SinglePickerData item) {
+    bool isSelected = _value.contains(item.value);
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (_value.contains(item.value)) {
+            _value.remove(item.value);
+          } else {
+            _value.add(item.value);
+          }
+          widget.onChanged(_value);
+        });
+      },
+      child: Container(
+        height: widget.itemHeight,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        margin: const EdgeInsets.only(bottom: 2),
+        color: isSelected ? Colors.grey.withOpacity(0.1) : Colors.transparent,
+        child: Center(
+          child: Text(
+            item.label,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black.withOpacity(0.5),
+            ),
+          ),
         ),
       ),
     );

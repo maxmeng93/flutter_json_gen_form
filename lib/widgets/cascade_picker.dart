@@ -1,0 +1,259 @@
+import 'package:flutter/material.dart';
+
+Future showCascadePicker(
+  context, {
+  String? title,
+  String? okText,
+  String? cancelText,
+  List<CascadePickerData>? options,
+  bool? multiple,
+  List<dynamic>? value,
+}) {
+  return showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.transparent,
+    barrierColor: const Color(0x99000000).withOpacity(0.6),
+    builder: (BuildContext context) {
+      return CascadePicker(
+        title: title,
+        okText: okText,
+        cancelText: cancelText,
+        value: value,
+        options: options,
+      );
+    },
+  );
+}
+
+class CascadePickerData {
+  final String label;
+  final dynamic value;
+  final List<CascadePickerData>? children;
+
+  const CascadePickerData({
+    required this.label,
+    required this.value,
+    this.children,
+  });
+}
+
+/// 级联选择器
+class CascadePicker extends StatefulWidget {
+  final List<CascadePickerData>? options;
+  final List<dynamic>? value;
+  final String? title;
+  final String? okText;
+  final String? cancelText;
+
+  const CascadePicker({
+    super.key,
+    this.options,
+    this.value,
+    this.title,
+    this.okText,
+    this.cancelText,
+  });
+
+  @override
+  State<CascadePicker> createState() => _CascadePickerState();
+}
+
+class _CascadePickerState extends State<CascadePicker>
+    with TickerProviderStateMixin {
+  TabController? _tabController;
+  final ScrollController _scrollController = ScrollController();
+  final double headerHeight = 42;
+  final double itemHeight = 34;
+  List<Tab> _tabs = [];
+  List<CascadePickerData> _options = [];
+  List<List<CascadePickerData>> _tabsOptions = [];
+  List<dynamic> _value = [];
+  List<int> _positions = [];
+  int _tabIndex = -1;
+
+  List<CascadePickerData> get _curTabOptions {
+    return _tabIndex >= 0 ? _tabsOptions[_tabIndex] : [];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.value ?? [];
+
+    _options = widget.options ?? [];
+    if (_options.isNotEmpty) {
+      _tabsOptions.add(_options);
+      _tabIndex = 0;
+    }
+
+    _tabs = [Tab(text: '请选择', height: itemHeight)];
+    _tabController = TabController(vsync: this, length: _tabs.length);
+  }
+
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _changeValue() {
+    List<dynamic> newValue = [];
+    if (_positions.isNotEmpty) {
+      for (int i = 0; i < _positions.length; i++) {
+        newValue.add(_tabsOptions[i][_positions[i]].value);
+      }
+    }
+    setState(() {
+      _value = newValue;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double height = headerHeight + itemHeight * 8;
+
+    return Container(
+      height: height,
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: headerHeight,
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    widget.cancelText ?? '取消',
+                    style: const TextStyle(fontSize: 15, color: Colors.blue),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      widget.title ?? '',
+                      style: const TextStyle(fontSize: 15, color: Colors.black),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop(_value);
+                  },
+                  child: Text(
+                    widget.cancelText ?? '确定',
+                    style: const TextStyle(fontSize: 15, color: Colors.blue),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          TabBar(
+            tabs: _tabs,
+            controller: _tabController,
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
+            dividerHeight: 0.5,
+            dividerColor: Colors.grey[300],
+            labelColor: Colors.blue,
+            // 每个label的左右填充
+            labelPadding: const EdgeInsets.symmetric(horizontal: 12),
+            unselectedLabelColor: Colors.grey,
+            indicatorSize: TabBarIndicatorSize.label,
+            indicatorColor: Colors.blue,
+            onTap: (index) {
+              setState(() {
+                _tabIndex = index;
+              });
+            },
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _curTabOptions.length,
+              itemBuilder: (_, index) {
+                return _item(index);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _item(int index) {
+    CascadePickerData item = _curTabOptions[index];
+    if (index < 0) return const SizedBox.shrink();
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          int newLength = _tabIndex + 1;
+          if (_positions.length > _tabIndex) {
+            _positions[_tabIndex] = index;
+            _positions.length = newLength;
+          } else {
+            _positions.add(index);
+          }
+          _tabs[_tabIndex] = Tab(text: item.label, height: itemHeight);
+
+          List<CascadePickerData>? children = item.children;
+          if (children != null) {
+            if (_tabsOptions.length > newLength) {
+              _tabsOptions[newLength] = children;
+              _tabsOptions.length = newLength + 1;
+            } else {
+              _tabsOptions.add(children);
+            }
+
+            Tab newTab = Tab(text: '请选择', height: itemHeight);
+            if (_tabs.length > newLength) {
+              _tabs[newLength] = newTab;
+              _tabs.length = newLength + 1;
+            } else {
+              _tabs.add(newTab);
+            }
+            _tabController = TabController(
+              vsync: this,
+              length: newLength + 1,
+            );
+
+            _tabIndex = newLength;
+            _tabController?.index = newLength;
+          } else {
+            _tabsOptions.length = newLength;
+            _tabs.length = newLength;
+            _tabController = TabController(vsync: this, length: newLength);
+            _tabController?.index = newLength - 1;
+          }
+
+          _changeValue();
+        });
+      },
+      child: Container(
+        height: itemHeight,
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              item.label,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black.withOpacity(0.5),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

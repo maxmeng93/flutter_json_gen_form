@@ -7,7 +7,7 @@ import '../validator/validator.dart';
 class MediaControl extends StatefulWidget {
   final dynamic data;
   final void Function(String field, dynamic value) onChanged;
-  final Future<String> Function(String filePath)? uploadFile;
+  final Future<String> Function(String filePath, String field)? uploadFile;
 
   const MediaControl({
     super.key,
@@ -59,7 +59,7 @@ class _MediaControlState extends State<MediaControl> {
 
   Future<void> _uploadFile(FormFieldState state, XFile file) async {
     if (widget.uploadFile != null) {
-      final url = await widget.uploadFile!(file.path);
+      final url = await widget.uploadFile!(file.path, field);
       if (multiple) {
         List<String> all = state.value ?? [];
         // 遍历all，根据file.path判断是否已经存在，如果存在则替换

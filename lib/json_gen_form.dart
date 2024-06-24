@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import './controls/controls.dart';
 import './widgets/widgets.dart';
 
+abstract class JsonGenFormInterface {
+  dynamic validate();
+  dynamic getFieldValue(String field);
+  void setFieldValue(String field, dynamic value);
+}
+
 class JsonGenForm extends StatefulWidget {
   final dynamic config;
   final double groupSpace;
   final double fieldSpace;
-  final Future<String> Function(String filePath)? uploadFile;
+  final Future<String> Function(String filePath, String field)? uploadFile;
 
   const JsonGenForm({
     super.key,
@@ -20,7 +26,8 @@ class JsonGenForm extends StatefulWidget {
   State<JsonGenForm> createState() => JsonGenFormState();
 }
 
-class JsonGenFormState extends State<JsonGenForm> {
+class JsonGenFormState extends State<JsonGenForm>
+    implements JsonGenFormInterface {
   final GlobalKey _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _data = {};
 
@@ -28,45 +35,22 @@ class JsonGenFormState extends State<JsonGenForm> {
   Widget build(BuildContext context) {
     final List<dynamic> config = widget.config;
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color(0xff222124),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Form(
-        key: _formKey,
-        // onChanged: () {
-        //   print('formField onChanged');
-        // },
-        child: Column(
-          children: [
-            ...config.map((item) {
-              final isLast = config.indexOf(item) == config.length - 1;
-              final isGroup = item['type'] == 'group';
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: config.map((item) {
+          final isLast = config.indexOf(item) == config.length - 1;
+          final isGroup = item['type'] == 'group';
 
-              if (isGroup) {
-                return _buildGroup(item, isLast);
-              }
+          if (isGroup) {
+            return _buildGroup(item, isLast);
+          }
 
-              return Container(
-                margin: EdgeInsets.only(bottom: isLast ? 0 : widget.groupSpace),
-                child: _buildField(item),
-              );
-            }).toList(),
-            ElevatedButton(
-              onPressed: () {
-                final formState = _formKey.currentState as FormState;
-                formState.save();
-                if (formState.validate()) {
-                  formState.save();
-                  print('提交成功');
-                }
-              },
-              child: const Text('提交'),
-            ),
-          ],
-        ),
+          return Container(
+            margin: EdgeInsets.only(bottom: isLast ? 0 : widget.groupSpace),
+            child: _buildField(item),
+          );
+        }).toList(),
       ),
     );
   }
@@ -115,8 +99,8 @@ class JsonGenFormState extends State<JsonGenForm> {
         return InputControl(data: config, onChanged: _onChanged);
       case 'select':
         return SelectControl(data: config, onChanged: _onChanged);
-      case 'cascader':
-        return Text('级联选择器');
+      case 'cascade':
+        return CascadeControl(data: config, onChanged: _onChanged);
       case 'radio':
         return RadioControl(data: config, onChanged: _onChanged);
       case 'checkbox':
@@ -140,15 +124,39 @@ class JsonGenFormState extends State<JsonGenForm> {
 
   _onChanged(String field, dynamic value) {
     List<String> fields = field.split('.');
-    setState(() {
-      _data[fields[0]] = _data[fields[0]] ?? {};
-      if (fields.length == 1) {
-        _data[fields[0]] = value;
-      } else {
-        _data[fields[0]][fields[1]] = value;
-      }
+    _data[fields[0]] = _data[fields[0]] ?? {};
+    if (fields.length == 1) {
+      _data[fields[0]] = value;
+    } else {
+      _data[fields[0]][fields[1]] = value;
+    }
+    print('onChanged $_data');
+  }
 
-      print('onChanged $_data');
-    });
+  @override
+  dynamic validate() async {
+    final formState = _formKey.currentState as FormState;
+    if (formState.validate()) {
+      return _data;
+    }
+    return false;
+  }
+
+  @override
+  dynamic getFieldValue(String field) {
+    List<String> fields = field.split('.');
+    if (fields.length == 1) {
+      return _data[fields[0]];
+    } else if (fields.length == 2) {
+      if (_data[fields[0]] == null) {
+        return null;
+      }
+      return _data[fields[0]][fields[1]];
+    }
+  }
+
+  @override
+  void setFieldValue(String field, dynamic value) {
+    _onChanged(field, value);
   }
 }

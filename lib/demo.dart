@@ -13,6 +13,7 @@ class JsonGenFormPage extends StatefulWidget {
 }
 
 class _JsonGenFormPageState extends State<JsonGenFormPage> {
+  final GlobalKey _key = GlobalKey<JsonGenFormState>();
   final List<dynamic> _data = [];
 
   @override
@@ -29,7 +30,7 @@ class _JsonGenFormPageState extends State<JsonGenFormPage> {
     });
   }
 
-  // Future<String> _uploadFile(String filePath) async {
+  // Future<String> _uploadFile(String filePath, String field) async {
   //   final extension = filePath.split('.').last;
   //   final data = await MultipartFile.fromFile(filePath);
 
@@ -63,7 +64,34 @@ class _JsonGenFormPageState extends State<JsonGenFormPage> {
             horizontal: 20.0,
             vertical: 20.0,
           ),
-          child: JsonGenForm(config: _data),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: const Color(0xff222124),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              children: [
+                JsonGenForm(
+                  key: _key,
+                  config: _data,
+                  // uploadFile: _uploadFile,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    final formState = _key.currentState as JsonGenFormState;
+                    final data = formState.validate();
+                    if (data == false) {
+                      print('验证错误');
+                    } else {
+                      print('提交成功 $data');
+                    }
+                  },
+                  child: const Text('提交'),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

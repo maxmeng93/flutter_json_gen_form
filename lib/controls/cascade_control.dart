@@ -3,21 +3,21 @@ import '../widgets/widgets.dart';
 import '../validator/validator.dart';
 import '../constants.dart';
 
-class SelectControl extends StatefulWidget {
+class CascadeControl extends StatefulWidget {
   final dynamic data;
   final void Function(String field, dynamic value) onChanged;
 
-  const SelectControl({
+  const CascadeControl({
     super.key,
     required this.data,
     required this.onChanged,
   });
 
   @override
-  State<SelectControl> createState() => _SelectControlState();
+  State<CascadeControl> createState() => _CascadeControlState();
 }
 
-class _SelectControlState extends State<SelectControl> {
+class _CascadeControlState extends State<CascadeControl> {
   late String field;
   String? label;
   String? placeholder;
@@ -25,7 +25,6 @@ class _SelectControlState extends State<SelectControl> {
   bool required = false;
   bool readonly = false;
   bool disabled = false;
-  bool multiple = false;
 
   /// 规则
   List<dynamic>? rules;
@@ -49,7 +48,6 @@ class _SelectControlState extends State<SelectControl> {
 
       readonly = data['readonly'] == true;
       disabled = data['disabled'] == true;
-      multiple = data['multiple'] == true;
 
       field = data['field'];
       label = data['label'];
@@ -58,15 +56,37 @@ class _SelectControlState extends State<SelectControl> {
     });
   }
 
+  List<CascadePickerData> _getOptions(dynamic data) {
+    if (data.length == 0) return [];
+
+    List<CascadePickerData> options = [];
+
+    for (var item in data) {
+      options.add(CascadePickerData(
+        label: item['label'],
+        value: item['value'],
+        children:
+            item['children'] != null ? _getOptions(item['children']) : null,
+      ));
+    }
+
+    return options;
+  }
+
+  List<String> _getLabels(List<dynamic> values, List<dynamic> data) {
+    if (values.length == 0) return [];
+
+    var value = values[0];
+    var item = data.firstWhere((item) => item['value'] == value);
+    if (values.length == 1) return [item['label']];
+
+    return item['children'] != null
+        ? [item['label'], ..._getLabels(values.sublist(1), item['children'])]
+        : [];
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<SinglePickerData> singlePickerData = options!
-        .map((item) => SinglePickerData(
-              label: item['label'],
-              value: item['value'],
-            ))
-        .toList();
-
     return FormField(
       initialValue: initialValue,
       builder: (FormFieldState state) {
@@ -76,25 +96,15 @@ class _SelectControlState extends State<SelectControl> {
             FieldLabel(label: label, required: required),
             GestureDetector(
               onTap: () {
-                showSinglePicker(
+                showCascadePicker(
                   context,
-                  title: label,
-                  options: singlePickerData,
-                  value: state.value,
-                  multiple: multiple,
-                ).then((selected) {
-                  if (selected != null) {
-                    if (multiple) {
-                      state.didChange(selected ?? []);
-                      widget.onChanged(field, selected ?? []);
-                    } else {
-                      state.didChange(selected);
-                      widget.onChanged(field, selected);
-                    }
-                  }
+                  options: _getOptions(options),
+                ).then((value) {
+                  widget.onChanged(field, value);
+                  state.didChange(value);
                 });
               },
-              child: InnerInput(state: state, child: _select(state)),
+              child: InnerInput(state: state, child: _cascade(state)),
             ),
             HelperError(state: state),
           ],
@@ -106,19 +116,11 @@ class _SelectControlState extends State<SelectControl> {
     );
   }
 
-  Widget _select(FormFieldState state) {
+  Widget _cascade(FormFieldState state) {
     dynamic value = state.value;
     String label = '';
     if (value != null) {
-      if (multiple) {
-        List<dynamic> selected = value;
-        label = selected.map((item) {
-          return options!
-              .firstWhere((option) => option['value'] == item)['label'];
-        }).join(', ');
-      } else {
-        label = options!.firstWhere((item) => item['value'] == value)['label'];
-      }
+      label = _getLabels(value, options!).join(' / ');
     } else if (placeholder != null) {
       label = placeholder!;
     }
