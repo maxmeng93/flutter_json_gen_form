@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import './json_gen_form.dart';
+import 'package:json_gen_form/json_gen_form.dart';
 
 class JsonGenFormPage extends StatefulWidget {
   const JsonGenFormPage({super.key});
