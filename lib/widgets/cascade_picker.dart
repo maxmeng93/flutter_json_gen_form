@@ -65,10 +65,9 @@ class _CascadePickerState extends State<CascadePicker>
   final double headerHeight = 42;
   final double itemHeight = 34;
   List<Tab> _tabs = [];
-  List<CascadePickerData> _options = [];
   List<List<CascadePickerData>> _tabsOptions = [];
   List<dynamic> _value = [];
-  List<int> _positions = [];
+  final List<int> _positions = [];
   int _tabIndex = -1;
 
   List<CascadePickerData> get _curTabOptions {
@@ -80,14 +79,34 @@ class _CascadePickerState extends State<CascadePicker>
     super.initState();
     _value = widget.value ?? [];
 
-    _options = widget.options ?? [];
-    if (_options.isNotEmpty) {
-      _tabsOptions.add(_options);
-      _tabIndex = 0;
-    }
+    print('_value $_value');
 
-    _tabs = [Tab(text: '请选择', height: itemHeight)];
-    _tabController = TabController(vsync: this, length: _tabs.length);
+    List<CascadePickerData> options = widget.options ?? [];
+    if (_value.isEmpty) {
+      print('1');
+      if (options.isNotEmpty) {
+        _tabsOptions.add(options);
+        _tabIndex = 0;
+      }
+
+      _tabs = [Tab(text: '请选择', height: itemHeight)];
+      _tabController = TabController(vsync: this, length: _tabs.length);
+    } else {
+      print('2');
+      List<Tab> tabs = [];
+      final List<List<CascadePickerData>> tabsOptions = [options];
+      for (var element in _getItemsChildren(_value, options)) {
+        tabs.add(Tab(text: element.label, height: itemHeight));
+        if (element.children != null) {
+          tabsOptions.add(element.children!);
+        }
+      }
+      _tabs = tabs;
+      _tabsOptions = tabsOptions;
+      _tabIndex = tabs.length - 1;
+      _tabController = TabController(vsync: this, length: _tabs.length);
+      _tabController?.index = _tabIndex;
+    }
   }
 
   @override
@@ -95,6 +114,19 @@ class _CascadePickerState extends State<CascadePicker>
     _tabController?.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  List<CascadePickerData> _getItemsChildren(
+      List<dynamic> values, List<CascadePickerData> data) {
+    if (values.length == 0) return [];
+
+    var value = values[0];
+    var item = data.firstWhere((item) => item.value == value);
+    if (values.length == 1) return [item];
+
+    return item.children != null
+        ? [item, ..._getItemsChildren(values.sublist(1), item.children!)]
+        : [];
   }
 
   void _changeValue() {

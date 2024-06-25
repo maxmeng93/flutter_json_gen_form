@@ -85,13 +85,16 @@ class JsonGenFormState extends State<JsonGenForm>
   Widget _buildField(Map<String, dynamic> config) {
     final type = config['type'];
 
-    String field = config['field'];
+    // group可能没有field
+    String? field = config['field'];
     dynamic value = config['value'];
-    if (value != null) {
+    if (field != null && value != null) {
       _onChanged(field, value);
     }
 
     switch (type) {
+      case 'group':
+        return Container();
       case 'text':
       case 'password':
       case 'textarea':
@@ -110,7 +113,7 @@ class JsonGenFormState extends State<JsonGenForm>
       case 'date':
       case 'time':
       case 'datetime':
-        return Text('日期时间选择器');
+        return DatetimeControl(data: config, onChanged: _onChanged);
       case 'media':
         return MediaControl(
           data: config,

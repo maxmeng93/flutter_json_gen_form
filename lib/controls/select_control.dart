@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
-import '../constants.dart';
 
 class SelectControl extends StatefulWidget {
   final dynamic data;
@@ -94,7 +93,27 @@ class _SelectControlState extends State<SelectControl> {
                   }
                 });
               },
-              child: InnerInput(state: state, child: _select(state)),
+              child: InnerInput(
+                state: state,
+                placeholder: placeholder,
+                suffixIcon:
+                    const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                formatValue: (FormFieldState state) {
+                  dynamic value = state.value;
+                  if (value == null) return null;
+
+                  if (multiple) {
+                    List<dynamic> selected = value;
+                    return selected.map((item) {
+                      return options!.firstWhere(
+                          (option) => option['value'] == item)['label'];
+                    }).join(', ');
+                  } else {
+                    return options!
+                        .firstWhere((item) => item['value'] == value)['label'];
+                  }
+                },
+              ),
             ),
             HelperError(state: state),
           ],
@@ -103,37 +122,6 @@ class _SelectControlState extends State<SelectControl> {
       validator: (value) {
         return validator(label, value, rules);
       },
-    );
-  }
-
-  Widget _select(FormFieldState state) {
-    dynamic value = state.value;
-    String label = '';
-    if (value != null) {
-      if (multiple) {
-        List<dynamic> selected = value;
-        label = selected.map((item) {
-          return options!
-              .firstWhere((option) => option['value'] == item)['label'];
-        }).join(', ');
-      } else {
-        label = options!.firstWhere((item) => item['value'] == value)['label'];
-      }
-    } else if (placeholder != null) {
-      label = placeholder!;
-    }
-
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            style: value != null ? fieldStyle : hintStyle,
-          ),
-        ),
-        const SizedBox(width: 4),
-        const Icon(Icons.arrow_drop_down, color: Colors.grey),
-      ],
     );
   }
 }

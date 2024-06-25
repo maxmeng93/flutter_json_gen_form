@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
-import '../constants.dart';
 
 class CascadeControl extends StatefulWidget {
   final dynamic data;
@@ -74,7 +73,7 @@ class _CascadeControlState extends State<CascadeControl> {
   }
 
   List<String> _getLabels(List<dynamic> values, List<dynamic> data) {
-    if (values.length == 0) return [];
+    if (values.isEmpty) return [];
 
     var value = values[0];
     var item = data.firstWhere((item) => item['value'] == value);
@@ -99,12 +98,23 @@ class _CascadeControlState extends State<CascadeControl> {
                 showCascadePicker(
                   context,
                   options: _getOptions(options),
+                  value: state.value,
                 ).then((value) {
                   widget.onChanged(field, value);
                   state.didChange(value);
                 });
               },
-              child: InnerInput(state: state, child: _cascade(state)),
+              child: InnerInput(
+                state: state,
+                placeholder: placeholder,
+                suffixIcon:
+                    const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                formatValue: (FormFieldState state) {
+                  dynamic value = state.value;
+                  if (value == null) return null;
+                  return _getLabels(value, options!).join(' / ');
+                },
+              ),
             ),
             HelperError(state: state),
           ],
@@ -113,29 +123,6 @@ class _CascadeControlState extends State<CascadeControl> {
       validator: (value) {
         return validator(label, value, rules);
       },
-    );
-  }
-
-  Widget _cascade(FormFieldState state) {
-    dynamic value = state.value;
-    String label = '';
-    if (value != null) {
-      label = _getLabels(value, options!).join(' / ');
-    } else if (placeholder != null) {
-      label = placeholder!;
-    }
-
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            style: value != null ? fieldStyle : hintStyle,
-          ),
-        ),
-        const SizedBox(width: 4),
-        const Icon(Icons.arrow_drop_down, color: Colors.grey),
-      ],
     );
   }
 }
