@@ -1,7 +1,7 @@
 name: json_gen_form
-description: "json to form generator for flutter"
+description: "json to form generator for flutter."
 version: 0.0.1
-homepage: "https://github.com/maxmeng93/flutter_json_gen_form"
+repository: "https://github.com/maxmeng93/flutter_json_gen_form"
 
 environment:
   sdk: '>=3.3.4 <4.0.0'
