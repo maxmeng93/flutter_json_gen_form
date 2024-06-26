@@ -24,11 +24,7 @@ class _CascadeControlState extends State<CascadeControl> {
   bool required = false;
   bool readonly = false;
   bool disabled = false;
-
-  /// 规则
   List<dynamic>? rules;
-
-  /// 选项
   List<dynamic>? options;
 
   @override
@@ -52,6 +48,10 @@ class _CascadeControlState extends State<CascadeControl> {
       label = data['label'];
       placeholder = data['placeholder'];
       initialValue = data['value'];
+
+      if (initialValue != null) {
+        widget.onChanged(field, initialValue);
+      }
     });
   }
 

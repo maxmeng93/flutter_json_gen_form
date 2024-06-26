@@ -56,6 +56,10 @@ class _DatetimeControlState extends State<DatetimeControl> {
       label = data['label'];
       placeholder = data['placeholder'];
       initialValue = data['value'];
+
+      if (initialValue != null) {
+        widget.onChanged(field, initialValue);
+      }
     });
   }
 

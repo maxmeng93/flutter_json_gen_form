@@ -5,10 +5,31 @@
     "field": "group1",
     "children": [
       {
+        "type": "row",
+        "gutter": 10,
+        "children": [
+          {
+            "type": "col",
+            "child": {
+              "type": "text",
+              "field": "name",
+              "label": "组名1"
+            }
+          },
+          {
+            "type": "col",
+            "child": {
+              "type": "number",
+              "field": "num",
+              "label": "人数"
+            }
+          }
+        ]
+      },
+      {
         "type": "text",
-        "field": "name",
-        "label": "组名",
-        "value": null
+        "field": "manage",
+        "label": "管理员"
       }
     ]
   },

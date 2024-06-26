@@ -1,8 +1,6 @@
-library json_gen_form;
-
 import 'package:flutter/material.dart';
 import './controls/controls.dart';
-import './widgets/widgets.dart';
+import './layouts/layouts.dart';
 
 abstract class JsonGenFormInterface {
   dynamic validate();
@@ -40,46 +38,7 @@ class JsonGenFormState extends State<JsonGenForm>
     return Form(
       key: _formKey,
       child: Column(
-        children: config.map((item) {
-          final isLast = config.indexOf(item) == config.length - 1;
-          final isGroup = item['type'] == 'group';
-
-          if (isGroup) {
-            return _buildGroup(item, isLast);
-          }
-
-          return Container(
-            margin: EdgeInsets.only(bottom: isLast ? 0 : widget.groupSpace),
-            child: _buildField(item),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildGroup(Map<String, dynamic> group, bool isLast) {
-    String? groupLabel = group['label'] ?? '';
-    String? groupField = group['field'] ?? '';
-    bool hiddenLabel = group['hiddenLabel'] == true;
-    List<dynamic> children = group['children'] ?? [];
-
-    return Container(
-      margin: EdgeInsets.only(bottom: isLast ? 0 : widget.groupSpace),
-      child: Column(
-        children: [
-          FieldLabel(label: groupLabel, hiddenLabel: hiddenLabel),
-          ...children.map((item) {
-            final isLast = children.indexOf(item) == children.length - 1;
-            if (groupField != '') {
-              item['field'] = '$groupField.${item['field']}';
-            }
-
-            return Container(
-              margin: EdgeInsets.only(bottom: isLast ? 0 : widget.fieldSpace),
-              child: _buildField(item),
-            );
-          }).toList(),
-        ],
+        children: config.map((item) => _buildField(item)).toList(),
       ),
     );
   }
@@ -87,16 +46,11 @@ class JsonGenFormState extends State<JsonGenForm>
   Widget _buildField(Map<String, dynamic> config) {
     final type = config['type'];
 
-    // group可能没有field
-    String? field = config['field'];
-    dynamic value = config['value'];
-    if (field != null && value != null) {
-      _onChanged(field, value);
-    }
-
     switch (type) {
       case 'group':
-        return Container();
+        return GroupLayout(data: config, buildField: _buildField);
+      case 'row':
+        return RowLayout(data: config, buildField: _buildField);
       case 'text':
       case 'password':
       case 'textarea':

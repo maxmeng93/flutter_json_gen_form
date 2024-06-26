@@ -57,6 +57,10 @@ class _RadioControlState extends State<RadioControl> {
       field = data['field'];
       label = data['label'];
       initialValue = data['value'];
+
+      if (initialValue != null) {
+        widget.onChanged(field, initialValue);
+      }
     });
   }
 

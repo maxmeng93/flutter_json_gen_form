@@ -87,6 +87,10 @@ class _InputControlState extends State<InputControl> {
       placeholder = data['placeholder'];
       initialValue = data['value'];
 
+      if (initialValue != null) {
+        widget.onChanged(field, initialValue);
+      }
+
       if (type == InputType.password) {
         obscureText = true;
       } else if (type == InputType.textarea) {

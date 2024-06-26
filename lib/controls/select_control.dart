@@ -54,6 +54,10 @@ class _SelectControlState extends State<SelectControl> {
       label = data['label'];
       placeholder = data['placeholder'];
       initialValue = data['value'];
+
+      if (initialValue != null) {
+        widget.onChanged(field, initialValue);
+      }
     });
   }
 
