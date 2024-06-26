@@ -11,16 +11,15 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker: ^1.1.0
+  fijkplayer: ^0.11.0
+  photo_view: ^0.14.0
+  omni_datetime_picker: ^2.0.1
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
-  fijkplayer: ^0.11.0
-  photo_view: ^0.14.0
-  dio: ^5.3.0
-  omni_datetime_picker: ^2.0.1
-  intl: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -41,33 +41,25 @@ class _JsonGenFormPageState extends State<JsonGenFormPage> {
             horizontal: 20.0,
             vertical: 20.0,
           ),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: const Color(0xff222124),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              children: [
-                JsonGenForm(
-                  key: _key,
-                  config: _data,
-                  // uploadFile: _uploadFile,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    final formState = _key.currentState as JsonGenFormState;
-                    final data = formState.validate();
-                    if (data == false) {
-                      print('验证错误');
-                    } else {
-                      print('提交成功 $data');
-                    }
-                  },
-                  child: const Text('提交'),
-                ),
-              ],
-            ),
+          child: Column(
+            children: [
+              JsonGenForm(
+                key: _key,
+                config: _data,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final formState = _key.currentState as JsonGenFormState;
+                  final data = formState.validate();
+                  if (data == false) {
+                    print('验证错误');
+                  } else {
+                    print('提交成功 $data');
+                  }
+                },
+                child: const Text('提交'),
+              ),
+            ],
           ),
         ),
       ),

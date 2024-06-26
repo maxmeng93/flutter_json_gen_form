@@ -57,6 +57,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.4+1"
+  dio:
+    dependency: transitive
+    description:
+      name: dio
+      sha256: "11e40df547d418cc0c4900a9318b26304e665da6fa4755399a9ff9efd09034b5"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.4.3+1"
   equatable:
     dependency: transitive
     description:
@@ -74,7 +82,7 @@ packages:
     source: hosted
     version: "1.3.1"
   fijkplayer:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: fijkplayer
       sha256: e6098034e696ce448f5f289fb5b3fa363df5e606bdb418d52944c1dcb8e14cba
@@ -169,7 +177,7 @@ packages:
     source: hosted
     version: "4.0.2"
   image_picker:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: image_picker
       sha256: "021834d9c0c3de46bf0fe40341fa07168407f694d9b2bb18d532dc1261867f7a"
@@ -233,7 +241,7 @@ packages:
     source: hosted
     version: "0.2.1+1"
   intl:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: intl
       sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
@@ -320,7 +328,7 @@ packages:
     source: hosted
     version: "1.0.0"
   omni_datetime_picker:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: omni_datetime_picker
       sha256: "554eb966e84f8d196cf6e189384141db46a79a192d1a360277ead98e5d6036bd"
@@ -336,7 +344,7 @@ packages:
     source: hosted
     version: "1.9.0"
   photo_view:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: photo_view
       sha256: "8036802a00bae2a78fc197af8a158e3e2f7b500561ed23b4c458107685e645bb"
