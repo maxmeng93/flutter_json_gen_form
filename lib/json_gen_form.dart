@@ -139,7 +139,7 @@ class JsonGenFormState extends State<JsonGenForm>
   }
 
   @override
-  dynamic validate() async {
+  dynamic validate() {
     final formState = _formKey.currentState as FormState;
     if (formState.validate()) {
       return _data;

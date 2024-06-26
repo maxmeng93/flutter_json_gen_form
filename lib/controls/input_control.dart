@@ -126,7 +126,9 @@ class _InputControlState extends State<InputControl> {
           readOnly: readonly,
           enabled: !disabled,
           style: fieldStyle,
-          decoration: inputDecoration(placeholder),
+          decoration: defaultInputDecoration.copyWith(
+            hintText: placeholder,
+          ),
           validator: (value) {
             dynamic val = _transformValue(value);
             return validator(label, val, rules);

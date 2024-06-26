@@ -141,7 +141,7 @@
 ## 验证规则
 
 - required 必填
-- type 快捷校验类型
+- type 快捷校验类型，仅支持文本输入框
   - email 邮箱
   - url 网址
 - min string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
@@ -153,3 +153,4 @@
 ## 依赖项
 
 - image_picker
+- fijkplayer

@@ -93,7 +93,15 @@ class _CascadeControlState extends State<CascadeControl> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FieldLabel(label: label, required: required),
-            GestureDetector(
+            BaseTextField(
+              state: state,
+              placeholder: placeholder,
+              suffixIcon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+              formatValue: (FormFieldState state) {
+                dynamic value = state.value;
+                if (value == null) return null;
+                return _getLabels(value, options!).join(' / ');
+              },
               onTap: () {
                 showCascadePicker(
                   context,
@@ -104,19 +112,7 @@ class _CascadeControlState extends State<CascadeControl> {
                   state.didChange(value);
                 });
               },
-              child: InnerInput(
-                state: state,
-                placeholder: placeholder,
-                suffixIcon:
-                    const Icon(Icons.arrow_drop_down, color: Colors.grey),
-                formatValue: (FormFieldState state) {
-                  dynamic value = state.value;
-                  if (value == null) return null;
-                  return _getLabels(value, options!).join(' / ');
-                },
-              ),
             ),
-            HelperError(state: state),
           ],
         );
       },

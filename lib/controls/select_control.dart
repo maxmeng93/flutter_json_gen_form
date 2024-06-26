@@ -73,7 +73,13 @@ class _SelectControlState extends State<SelectControl> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FieldLabel(label: label, required: required),
-            GestureDetector(
+            BaseTextField(
+              state: state,
+              placeholder: placeholder,
+              suffixIcon: const Icon(
+                Icons.arrow_drop_down,
+                color: Colors.grey,
+              ),
               onTap: () {
                 showSinglePicker(
                   context,
@@ -93,29 +99,22 @@ class _SelectControlState extends State<SelectControl> {
                   }
                 });
               },
-              child: InnerInput(
-                state: state,
-                placeholder: placeholder,
-                suffixIcon:
-                    const Icon(Icons.arrow_drop_down, color: Colors.grey),
-                formatValue: (FormFieldState state) {
-                  dynamic value = state.value;
-                  if (value == null) return null;
+              formatValue: (FormFieldState state) {
+                dynamic value = state.value;
+                if (value == null) return null;
 
-                  if (multiple) {
-                    List<dynamic> selected = value;
-                    return selected.map((item) {
-                      return options!.firstWhere(
-                          (option) => option['value'] == item)['label'];
-                    }).join(', ');
-                  } else {
-                    return options!
-                        .firstWhere((item) => item['value'] == value)['label'];
-                  }
-                },
-              ),
+                if (multiple) {
+                  List<dynamic> selected = value;
+                  return selected.map((item) {
+                    return options!.firstWhere(
+                        (option) => option['value'] == item)['label'];
+                  }).join(', ');
+                } else {
+                  return options!
+                      .firstWhere((item) => item['value'] == value)['label'];
+                }
+              },
             ),
-            HelperError(state: state),
           ],
         );
       },

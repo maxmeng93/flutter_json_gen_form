@@ -79,11 +79,8 @@ class _CascadePickerState extends State<CascadePicker>
     super.initState();
     _value = widget.value ?? [];
 
-    print('_value $_value');
-
     List<CascadePickerData> options = widget.options ?? [];
     if (_value.isEmpty) {
-      print('1');
       if (options.isNotEmpty) {
         _tabsOptions.add(options);
         _tabIndex = 0;
@@ -92,7 +89,6 @@ class _CascadePickerState extends State<CascadePicker>
       _tabs = [Tab(text: '请选择', height: itemHeight)];
       _tabController = TabController(vsync: this, length: _tabs.length);
     } else {
-      print('2');
       List<Tab> tabs = [];
       final List<List<CascadePickerData>> tabsOptions = [options];
       for (var element in _getItemsChildren(_value, options)) {

@@ -68,7 +68,14 @@ class _DatetimeControlState extends State<DatetimeControl> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FieldLabel(label: label, required: required),
-            GestureDetector(
+            BaseTextField(
+              state: state,
+              placeholder: placeholder,
+              suffixIcon: const Icon(
+                size: 14,
+                Icons.calendar_month_outlined,
+                color: Colors.grey,
+              ),
               onTap: () async {
                 if (readonly || disabled) return;
 
@@ -97,17 +104,7 @@ class _DatetimeControlState extends State<DatetimeControl> {
                 widget.onChanged(field, value);
                 state.didChange(value);
               },
-              child: InnerInput(
-                state: state,
-                placeholder: placeholder,
-                suffixIcon: const Icon(
-                  size: 14,
-                  Icons.calendar_month_outlined,
-                  color: Colors.grey,
-                ),
-              ),
             ),
-            HelperError(state: state),
           ],
         );
       },

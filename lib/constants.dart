@@ -29,36 +29,27 @@ Color primaryColor = Colors.blue;
 Color errorColor = Colors.red;
 Color disabledColor = Colors.grey;
 
-InputDecoration inputDecoration(String? placeholder) {
-  final border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(8),
-    borderSide: const BorderSide(
-      color: Colors.transparent,
-      width: 1,
-    ),
-  );
-
-  return InputDecoration(
-    // 减少垂直空间布局
-    isDense: true,
-    // 背景色灰色
-    filled: true,
-    fillColor: const Color(0xff0F1719).withOpacity(0.5),
-    // labelText: '姓名',
-    // 占位符，提示文案
-    hintText: placeholder,
-    hintStyle: hintStyle,
-    // prefix: Text('* 姓名：'),
-    // prefixIcon: const Icon(Icons.person),
-    // 边框
-    border: border,
-    enabledBorder: border,
-    disabledBorder: border,
-    focusedBorder: border.copyWith(
-      borderSide: BorderSide(color: primaryColor),
-    ),
-    errorBorder: border.copyWith(
-      borderSide: BorderSide(color: errorColor),
-    ),
-  );
-}
+OutlineInputBorder _inputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(8),
+  borderSide: const BorderSide(
+    color: Colors.transparent,
+    width: 1,
+  ),
+);
+InputDecoration defaultInputDecoration = InputDecoration(
+  // 背景色灰色
+  filled: true,
+  fillColor: const Color(0xff0F1719).withOpacity(0.5),
+  // 提示文案样式
+  hintStyle: hintStyle,
+  // 边框
+  border: _inputBorder,
+  enabledBorder: _inputBorder,
+  disabledBorder: _inputBorder,
+  focusedBorder: _inputBorder.copyWith(
+    borderSide: BorderSide(color: primaryColor),
+  ),
+  errorBorder: _inputBorder.copyWith(
+    borderSide: BorderSide(color: errorColor),
+  ),
+);

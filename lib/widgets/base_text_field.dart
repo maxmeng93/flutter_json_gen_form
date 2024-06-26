@@ -1,34 +1,80 @@
 import 'package:flutter/material.dart';
-import '../widgets/field_label.dart';
-import '../validator/validator.dart';
 import '../constants.dart';
 
-class BaseTextField extends StatelessWidget {
-  const BaseTextField({super.key});
+class BaseTextField extends StatefulWidget {
+  final FormFieldState state;
+  final void Function()? onTap;
+  final String? placeholder;
+  final String? Function(FormFieldState state)? formatValue;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final InputDecoration? inputDecoration;
+
+  const BaseTextField({
+    super.key,
+    required this.state,
+    this.onTap,
+    this.placeholder,
+    this.formatValue,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.inputDecoration,
+  });
+
+  @override
+  State<BaseTextField> createState() => _BaseTextFieldState();
+}
+
+class _BaseTextFieldState extends State<BaseTextField> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _setValue();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant BaseTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.state.value != null) {
+      _setValue();
+    }
+  }
+
+  void _setValue() {
+    final state = widget.state;
+    if (state.value == null) {
+      _controller.text = '';
+    } else {
+      if (widget.formatValue != null) {
+        _controller.text = widget.formatValue!(state) ?? '';
+      } else {
+        _controller.text = state.value;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: const Color(0xff0F1719).withOpacity(0.5),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              style: fieldStyle,
-              decoration: null,
-            ),
-          ),
-          Container(
-            width: 24,
-            height: 24,
-            margin: const EdgeInsets.only(left: 6),
-            child: Icon(Icons.arrow_drop_down, color: Colors.grey),
-          ),
-        ],
+    return TextField(
+      controller: _controller,
+      style: fieldStyle,
+      onTap: () {
+        if (widget.onTap != null) {
+          widget.onTap!();
+        }
+      },
+      decoration: defaultInputDecoration.copyWith(
+        hintText: widget.placeholder,
+        suffixIcon: widget.suffixIcon,
+        errorText: widget.state.errorText,
       ),
     );
   }
