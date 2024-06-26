@@ -4,6 +4,7 @@ import 'package:photo_view/photo_view.dart';
 import '../widgets/widgets.dart';
 import '../layouts/layouts.dart';
 import '../validator/validator.dart';
+import '../utils/utils.dart';
 
 class MediaControl extends StatefulWidget {
   final dynamic data;
@@ -51,7 +52,7 @@ class _MediaControlState extends State<MediaControl> {
       disabled = data['disabled'] == true;
       multiple = data['multiple'] == true;
 
-      field = data['field'];
+      field = getField(data);
       label = data['label'];
       initialValue = data['value'];
       mediaType = data['mediaType'] ?? 'media';

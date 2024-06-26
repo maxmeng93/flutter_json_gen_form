@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
 import '../constants.dart';
+import '../utils/utils.dart';
 
 class SwitchControl extends StatefulWidget {
   final dynamic data;
@@ -44,7 +45,7 @@ class _SwitchControlState extends State<SwitchControl> {
       readonly = data['readonly'] == true;
       disabled = data['disabled'] == true;
 
-      field = data['field'];
+      field = getField(data);
       label = data['label'];
       initialValue = data['value'] ?? false;
 

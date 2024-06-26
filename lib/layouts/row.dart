@@ -28,18 +28,10 @@ class RowLayout extends StatelessWidget {
     );
   }
 
-  getChildField(child) {
-    String groupField = data['field'] ?? '';
-    String childField = child['field'] ?? '';
-    List<String> list = [groupField, childField];
-    list = list.where((item) => item != '').toList();
-    return list.join('.');
-  }
-
   List<Widget> _item(dynamic item, bool isLast) {
     double gutter = data['gutter'].toDouble() ?? 0;
 
-    item['child']['field'] = getChildField(item['child']);
+    item['child']['upField'] = data['upField'];
 
     return [
       Expanded(

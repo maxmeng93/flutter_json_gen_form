@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
+import '../utils/utils.dart';
 
 class CascadeControl extends StatefulWidget {
   final dynamic data;
@@ -44,7 +45,7 @@ class _CascadeControlState extends State<CascadeControl> {
       readonly = data['readonly'] == true;
       disabled = data['disabled'] == true;
 
-      field = data['field'];
+      field = getField(data);
       label = data['label'];
       placeholder = data['placeholder'];
       initialValue = data['value'];

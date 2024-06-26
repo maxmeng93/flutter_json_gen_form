@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
+import '../utils/utils.dart';
 
 class SelectControl extends StatefulWidget {
   final dynamic data;
@@ -50,7 +51,7 @@ class _SelectControlState extends State<SelectControl> {
       disabled = data['disabled'] == true;
       multiple = data['multiple'] == true;
 
-      field = data['field'];
+      field = getField(data);
       label = data['label'];
       placeholder = data['placeholder'];
       initialValue = data['value'];

@@ -29,7 +29,7 @@ class JsonGenForm extends StatefulWidget {
 class JsonGenFormState extends State<JsonGenForm>
     implements JsonGenFormInterface {
   final GlobalKey _formKey = GlobalKey<FormState>();
-  final Map<String, dynamic> _data = {};
+  Map<String, dynamic> _data = {};
 
   @override
   Widget build(BuildContext context) {
@@ -81,15 +81,20 @@ class JsonGenFormState extends State<JsonGenForm>
     }
   }
 
-  _onChanged(String field, dynamic value) {
-    List<String> fields = field.split('.');
-    _data[fields[0]] = _data[fields[0]] ?? {};
-    if (fields.length == 1) {
-      _data[fields[0]] = value;
-    } else {
-      _data[fields[0]][fields[1]] = value;
+  void _onChanged(String field, dynamic value) {
+    List<String> keys = field.split('.');
+    Map<String, dynamic> cur = _data;
+
+    for (int i = 0; i < keys.length - 1; i++) {
+      if (cur[keys[i]] == null || cur[keys[i]] is! Map<String, dynamic>) {
+        cur[keys[i]] = <String, dynamic>{};
+      }
+      cur = cur[keys[i]];
     }
-    print('onChanged $_data');
+
+    cur[keys.last] = value;
+
+    debugPrint('data: $_data');
   }
 
   @override

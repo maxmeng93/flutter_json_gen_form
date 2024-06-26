@@ -33,10 +33,10 @@ class GroupLayout extends StatelessWidget {
     );
   }
 
-  getChildField(child) {
+  getUpField() {
+    String groupUpField = data['upField'] ?? '';
     String groupField = data['field'] ?? '';
-    String childField = child['field'] ?? '';
-    List<String> list = [groupField, childField];
+    List<String> list = [groupUpField, groupField];
     list = list.where((item) => item != '').toList();
     return list.join('.');
   }
@@ -44,7 +44,7 @@ class GroupLayout extends StatelessWidget {
   List<Widget> _item(dynamic item, bool isLast) {
     double gutter = data['gutter'] ?? 0;
 
-    item['field'] = getChildField(item);
+    item['upField'] = getUpField();
 
     return [
       buildField(item),

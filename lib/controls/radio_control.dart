@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
 import '../constants.dart';
+import '../utils/utils.dart';
 
 class RadioControl extends StatefulWidget {
   final dynamic data;
@@ -54,7 +55,7 @@ class _RadioControlState extends State<RadioControl> {
       readonly = data['readonly'] == true;
       disabled = data['disabled'] == true;
 
-      field = data['field'];
+      field = getField(data);
       label = data['label'];
       initialValue = data['value'];
 

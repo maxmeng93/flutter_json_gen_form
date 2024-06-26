@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
+import '../utils/utils.dart';
 
 class DatetimeControl extends StatefulWidget {
   final dynamic data;
@@ -52,7 +53,7 @@ class _DatetimeControlState extends State<DatetimeControl> {
       readonly = data['readonly'] == true;
       disabled = data['disabled'] == true;
 
-      field = data['field'];
+      field = getField(data);
       label = data['label'];
       placeholder = data['placeholder'];
       initialValue = data['value'];

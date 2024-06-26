@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/field_label.dart';
 import '../validator/validator.dart';
 import '../constants.dart';
+import '../utils/utils.dart';
 
 enum InputType {
   text,
@@ -82,7 +83,7 @@ class _InputControlState extends State<InputControl> {
       readonly = data['readonly'] == true;
       disabled = data['disabled'] == true;
 
-      field = data['field'];
+      field = getField(data);
       label = data['label'];
       placeholder = data['placeholder'];
       initialValue = data['value'];
