@@ -68,6 +68,7 @@ class _SelectControlState extends State<SelectControl> {
 
     return FormField(
       initialValue: initialValue,
+      enabled: !disabled,
       builder: (FormFieldState state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,12 +76,14 @@ class _SelectControlState extends State<SelectControl> {
             FieldLabel(label: label, required: required),
             BaseTextField(
               state: state,
+              readonly: readonly,
               placeholder: placeholder,
               suffixIcon: const Icon(
                 Icons.arrow_drop_down,
                 color: Colors.grey,
               ),
               onTap: () {
+                if (readonly || disabled) return;
                 showSinglePicker(
                   context,
                   title: label,

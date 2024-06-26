@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import '../widgets/widgets.dart';
+import '../layouts/layouts.dart';
 import '../validator/validator.dart';
 
 class MediaControl extends StatefulWidget {
@@ -29,9 +30,9 @@ class _MediaControlState extends State<MediaControl> {
   bool readonly = false;
   bool disabled = false;
   bool multiple = false;
-
-  /// 规则
   List<dynamic>? rules;
+
+  bool get onlyWatch => readonly || disabled;
 
   @override
   void initState() {
@@ -110,7 +111,8 @@ class _MediaControlState extends State<MediaControl> {
 
     return Grid(
       rowCount: 3,
-      itemCount: images.length + ((multiple || images.isEmpty) ? 1 : 0),
+      itemCount: images.length +
+          ((!onlyWatch && (multiple || images.isEmpty)) ? 1 : 0),
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
       itemBuilder: (context, index) {
@@ -184,29 +186,32 @@ class _MediaControlState extends State<MediaControl> {
           ),
           child: isImage ? _renderImage(url) : _renderVideo(url),
         ),
-        Positioned(
-          top: -5,
-          right: -5,
-          child: GestureDetector(
-            onTap: () {
-              if (multiple) {
-                List<String> all = [...state.value ?? []];
-                all.remove(url);
-                state.didChange(all);
-                widget.onChanged(field, all);
-              } else {
-                state.didChange(null);
-                widget.onChanged(field, null);
-              }
-            },
-            child: Container(
-              width: 14,
-              height: 14,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(7),
+        Visibility(
+          visible: !onlyWatch,
+          child: Positioned(
+            top: -5,
+            right: -5,
+            child: GestureDetector(
+              onTap: () {
+                if (multiple) {
+                  List<String> all = [...state.value ?? []];
+                  all.remove(url);
+                  state.didChange(all);
+                  widget.onChanged(field, all);
+                } else {
+                  state.didChange(null);
+                  widget.onChanged(field, null);
+                }
+              },
+              child: Container(
+                width: 14,
+                height: 14,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                child: const Icon(Icons.close, color: Colors.white, size: 12),
               ),
-              child: const Icon(Icons.close, color: Colors.white, size: 12),
             ),
           ),
         ),

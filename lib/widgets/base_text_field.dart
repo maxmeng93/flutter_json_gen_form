@@ -3,6 +3,7 @@ import '../constants.dart';
 
 class BaseTextField extends StatefulWidget {
   final FormFieldState state;
+  final bool? readonly;
   final void Function()? onTap;
   final String? placeholder;
   final String? Function(FormFieldState state)? formatValue;
@@ -13,6 +14,7 @@ class BaseTextField extends StatefulWidget {
   const BaseTextField({
     super.key,
     required this.state,
+    this.readonly = false,
     this.onTap,
     this.placeholder,
     this.formatValue,
@@ -65,6 +67,8 @@ class _BaseTextFieldState extends State<BaseTextField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
+      enabled: widget.state.widget.enabled,
+      readOnly: widget.readonly!,
       style: fieldStyle,
       onTap: () {
         if (widget.onTap != null) {

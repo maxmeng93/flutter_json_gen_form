@@ -88,6 +88,7 @@ class _CascadeControlState extends State<CascadeControl> {
   Widget build(BuildContext context) {
     return FormField(
       initialValue: initialValue,
+      enabled: !disabled,
       builder: (FormFieldState state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,6 +96,7 @@ class _CascadeControlState extends State<CascadeControl> {
             FieldLabel(label: label, required: required),
             BaseTextField(
               state: state,
+              readonly: readonly,
               placeholder: placeholder,
               suffixIcon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
               formatValue: (FormFieldState state) {
@@ -103,6 +105,8 @@ class _CascadeControlState extends State<CascadeControl> {
                 return _getLabels(value, options!).join(' / ');
               },
               onTap: () {
+                if (readonly || disabled) return;
+
                 showCascadePicker(
                   context,
                   options: _getOptions(options),

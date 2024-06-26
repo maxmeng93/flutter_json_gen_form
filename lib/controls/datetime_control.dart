@@ -63,6 +63,7 @@ class _DatetimeControlState extends State<DatetimeControl> {
   Widget build(BuildContext context) {
     return FormField(
       initialValue: initialValue,
+      enabled: !disabled,
       builder: (FormFieldState state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,6 +71,7 @@ class _DatetimeControlState extends State<DatetimeControl> {
             FieldLabel(label: label, required: required),
             BaseTextField(
               state: state,
+              readonly: readonly,
               placeholder: placeholder,
               suffixIcon: const Icon(
                 size: 14,
