@@ -1,6 +1,34 @@
+library json_gen_form;
+
 import 'package:flutter/material.dart';
 import './controls/controls.dart';
 import './layouts/layouts.dart';
+import './theme.dart';
+
+class JsonGenFormDecoration {
+  final Widget Function(Widget child)? groupWrapper;
+  final Widget Function({
+    String field,
+    String upField,
+    String label,
+    Widget child,
+  })? groupLabelWrapper;
+  final Widget Function(Widget child)? rowWrapper;
+  final Widget Function({
+    String field,
+    String upField,
+    String label,
+    bool required,
+    Widget child,
+  })? fieldLabelWrapper;
+
+  const JsonGenFormDecoration({
+    this.groupWrapper,
+    this.groupLabelWrapper,
+    this.rowWrapper,
+    this.fieldLabelWrapper,
+  });
+}
 
 abstract class JsonGenFormInterface {
   dynamic validate();
@@ -10,15 +38,15 @@ abstract class JsonGenFormInterface {
 
 class JsonGenForm extends StatefulWidget {
   final dynamic config;
-  final double groupSpace;
-  final double fieldSpace;
+  final JsonGenFormDecoration? decoration;
+  final ThemeData? theme;
   final Future<String> Function(String filePath, String field)? uploadFile;
 
   const JsonGenForm({
     super.key,
     this.config,
-    this.groupSpace = 10,
-    this.fieldSpace = 10,
+    this.decoration,
+    this.theme,
     this.uploadFile,
   });
 
@@ -29,16 +57,20 @@ class JsonGenForm extends StatefulWidget {
 class JsonGenFormState extends State<JsonGenForm>
     implements JsonGenFormInterface {
   final GlobalKey _formKey = GlobalKey<FormState>();
-  Map<String, dynamic> _data = {};
+  final Map<String, dynamic> _data = {};
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = widget.theme ?? JsonGenFormTheme.getTheme(context);
     final List<dynamic> config = widget.config;
 
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: config.map((item) => _buildField(item)).toList(),
+    return Theme(
+      data: theme,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: config.map((item) => _buildField(item)).toList(),
+        ),
       ),
     );
   }

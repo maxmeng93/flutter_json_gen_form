@@ -92,7 +92,7 @@ class _MediaControlState extends State<MediaControl> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FieldLabel(label: label, required: required),
+            FieldLabel(data: widget.data, required: required),
             InnerWrap(state: state, child: _media(state)),
             HelperError(state: state),
           ],

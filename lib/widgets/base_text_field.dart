@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../constants.dart';
 
 class BaseTextField extends StatefulWidget {
   final FormFieldState state;
@@ -65,17 +64,19 @@ class _BaseTextFieldState extends State<BaseTextField> {
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+
     return TextField(
       controller: _controller,
       enabled: widget.state.widget.enabled,
       readOnly: widget.readonly!,
-      style: fieldStyle,
+      style: textTheme.bodySmall,
       onTap: () {
         if (widget.onTap != null) {
           widget.onTap!();
         }
       },
-      decoration: defaultInputDecoration.copyWith(
+      decoration: const InputDecoration().copyWith(
         hintText: widget.placeholder,
         suffixIcon: widget.suffixIcon,
         errorText: widget.state.errorText,

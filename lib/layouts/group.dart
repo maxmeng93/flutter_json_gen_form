@@ -13,13 +13,11 @@ class GroupLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? label = data['label'] ?? '';
-    bool hiddenLabel = data['hiddenLabel'] == true;
     List<dynamic> children = data['children'] ?? [];
 
     return Column(
       children: [
-        FieldLabel(label: label, hiddenLabel: hiddenLabel),
+        FieldLabel(data: data),
         ...children
             .map(
               (item) {

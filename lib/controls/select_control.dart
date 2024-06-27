@@ -78,7 +78,7 @@ class _SelectControlState extends State<SelectControl> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FieldLabel(label: label, required: required),
+            FieldLabel(data: widget.data, required: required),
             BaseTextField(
               state: state,
               readonly: readonly,

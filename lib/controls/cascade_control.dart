@@ -94,7 +94,7 @@ class _CascadeControlState extends State<CascadeControl> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FieldLabel(label: label, required: required),
+            FieldLabel(data: widget.data, required: required),
             BaseTextField(
               state: state,
               readonly: readonly,

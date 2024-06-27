@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
-import '../constants.dart';
 import '../utils/utils.dart';
 
 class SwitchControl extends StatefulWidget {
@@ -61,8 +60,8 @@ class _SwitchControlState extends State<SwitchControl> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FieldLabel(label: label, required: required),
-            InnerWrap(state: state, child: _switch(state)),
+            FieldLabel(data: widget.data, required: required),
+            InnerWrap(state: state, child: _switch(context, state)),
             HelperError(state: state),
           ],
         );
@@ -73,7 +72,8 @@ class _SwitchControlState extends State<SwitchControl> {
     );
   }
 
-  Widget _switch(FormFieldState state) {
+  Widget _switch(BuildContext context, FormFieldState state) {
+    Color primaryColor = Theme.of(context).colorScheme.primary;
     bool isCheck = state.value;
 
     return GestureDetector(

@@ -10,7 +10,7 @@ class InnerWrap extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
       child: child,
     );
   }

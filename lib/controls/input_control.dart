@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/field_label.dart';
 import '../validator/validator.dart';
-import '../constants.dart';
 import '../utils/utils.dart';
 
 enum InputType {
@@ -114,10 +113,12 @@ class _InputControlState extends State<InputControl> {
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FieldLabel(label: label, required: required),
+        FieldLabel(data: widget.data, required: required),
         TextFormField(
           // 初始值
           initialValue: initialValue,
@@ -130,8 +131,8 @@ class _InputControlState extends State<InputControl> {
           maxLines: maxLines,
           readOnly: readonly,
           enabled: !disabled,
-          style: fieldStyle,
-          decoration: defaultInputDecoration.copyWith(
+          style: textTheme.bodySmall,
+          decoration: const InputDecoration().copyWith(
             hintText: placeholder,
           ),
           validator: (value) {

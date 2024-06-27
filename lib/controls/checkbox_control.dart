@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
-import '../constants.dart';
 import '../utils/utils.dart';
 
 class CheckboxControl extends StatefulWidget {
@@ -73,12 +72,12 @@ class _CheckboxControlState extends State<CheckboxControl> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FieldLabel(label: label, required: required),
+            FieldLabel(data: widget.data, required: required),
             InnerWrap(
               state: state,
               child: Row(
                 children: options!.map((item) {
-                  return _item(item['label'], item['value'], state);
+                  return _item(context, item['label'], item['value'], state);
                 }).toList(),
               ),
             ),
@@ -92,7 +91,13 @@ class _CheckboxControlState extends State<CheckboxControl> {
     );
   }
 
-  Widget _item(String? label, dynamic val, FormFieldState state) {
+  Widget _item(
+    BuildContext context,
+    String? label,
+    dynamic val,
+    FormFieldState state,
+  ) {
+    TextTheme textTheme = Theme.of(context).textTheme;
     final value = state.value ?? [];
     bool isCheck = value.contains(val);
 
@@ -137,7 +142,7 @@ class _CheckboxControlState extends State<CheckboxControl> {
                 ),
               ),
             ),
-            if (label != null) Text(label, style: fieldStyle),
+            if (label != null) Text(label, style: textTheme.bodySmall),
           ],
         ),
       ),

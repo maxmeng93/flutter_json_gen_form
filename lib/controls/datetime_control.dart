@@ -73,7 +73,7 @@ class _DatetimeControlState extends State<DatetimeControl> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FieldLabel(label: label, required: required),
+            FieldLabel(data: widget.data, required: required),
             BaseTextField(
               state: state,
               readonly: readonly,
