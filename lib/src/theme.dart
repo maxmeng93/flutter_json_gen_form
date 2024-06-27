@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class JsonGenFormTheme {
   static ThemeData getTheme(BuildContext context) {
     final ThemeData baseTheme = Theme.of(context);
-    final isDark = baseTheme.brightness == Brightness.dark;
     final ColorScheme colorScheme = baseTheme.colorScheme;
     final Color primaryColor = colorScheme.primary;
     final Color errorColor = colorScheme.error;
