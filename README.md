@@ -2,7 +2,7 @@
 
 ## 通用参数
 
-除 `group` 外，其他类型都有以下通用参数
+除 `group`、`row`、`col` 外，其他类型都有以下通用参数。所有类型都有 `extra`。
 
 | 字段        | 描述     | 类型    | 默认值 | 必填 |
 | ----------- | -------- | ------- | ------ | ---- |
@@ -14,6 +14,7 @@
 | disabled    | 是否禁用 | bool    | false  | -    |
 | readonly    | 是否只读 | bool    | false  | -    |
 | rules       | 校验规则 | List    | []     | -    |
+| extra       | 额外参数 | dynamic |        | -    |
 
 ## 表单类型
 
@@ -175,8 +176,3 @@
 - len string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
 - pattern 正则校验
 - message 错误提示信息
-
-## 依赖项
-
-- image_picker
-- fijkplayer

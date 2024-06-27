@@ -1,4 +1,6 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../model.dart';
 
 class FieldLabel extends StatelessWidget {
   final dynamic data;
@@ -22,10 +24,10 @@ class FieldLabel extends StatelessWidget {
     TextTheme theme = Theme.of(context).textTheme;
     TextStyle? style = isGroup ? theme.labelMedium : theme.labelSmall;
 
-    return Row(
+    Widget child = Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(label, style: style!),
+        Text(label, style: style),
         const SizedBox(width: 3),
         Visibility(
           visible: required,
@@ -33,5 +35,16 @@ class FieldLabel extends StatelessWidget {
         ),
       ],
     );
+
+    final decoration = Provider.of<JsonGenFormModel>(context).decoration;
+    final groupLabelWrap = decoration?.groupLabelWrap;
+    final controlLabelWrap = decoration?.controlLabelWrap;
+
+    if (isGroup && groupLabelWrap != null) {
+      return groupLabelWrap(child, data);
+    } else if (!isGroup && controlLabelWrap != null) {
+      return controlLabelWrap(child, data);
+    }
+    return child;
   }
 }

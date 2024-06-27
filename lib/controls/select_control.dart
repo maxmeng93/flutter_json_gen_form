@@ -64,6 +64,7 @@ class _SelectControlState extends State<SelectControl> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     List<SinglePickerData> singlePickerData = options!
         .map((item) => SinglePickerData(
               label: item['label'],
@@ -83,9 +84,9 @@ class _SelectControlState extends State<SelectControl> {
               state: state,
               readonly: readonly,
               placeholder: placeholder,
-              suffixIcon: const Icon(
+              suffixIcon: Icon(
                 Icons.arrow_drop_down,
-                color: Colors.grey,
+                color: theme.inputDecorationTheme.iconColor,
               ),
               onTap: () {
                 if (readonly || disabled) return;

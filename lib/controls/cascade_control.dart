@@ -87,6 +87,8 @@ class _CascadeControlState extends State<CascadeControl> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
     return FormField(
       initialValue: initialValue,
       enabled: !disabled,
@@ -99,7 +101,10 @@ class _CascadeControlState extends State<CascadeControl> {
               state: state,
               readonly: readonly,
               placeholder: placeholder,
-              suffixIcon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+              suffixIcon: Icon(
+                Icons.arrow_drop_down,
+                color: theme.inputDecorationTheme.iconColor,
+              ),
               formatValue: (FormFieldState state) {
                 dynamic value = state.value;
                 if (value == null) return null;

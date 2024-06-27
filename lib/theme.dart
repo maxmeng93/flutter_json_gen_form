@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class JsonGenFormTheme {
   static ThemeData getTheme(BuildContext context) {
     final ThemeData baseTheme = Theme.of(context);
-    // final isDark = baseTheme.brightness == Brightness.dark;
+    final isDark = baseTheme.brightness == Brightness.dark;
     final ColorScheme colorScheme = baseTheme.colorScheme;
     final Color primaryColor = colorScheme.primary;
     final Color errorColor = colorScheme.error;
@@ -42,6 +42,7 @@ class JsonGenFormTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surfaceContainer,
+        iconColor: colorScheme.inverseSurface,
         // 提示文案样式
         hintStyle: TextStyle(
           height: 1.2,

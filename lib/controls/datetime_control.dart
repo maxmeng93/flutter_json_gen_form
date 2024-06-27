@@ -66,6 +66,8 @@ class _DatetimeControlState extends State<DatetimeControl> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
     return FormField(
       initialValue: initialValue,
       enabled: !disabled,
@@ -78,10 +80,10 @@ class _DatetimeControlState extends State<DatetimeControl> {
               state: state,
               readonly: readonly,
               placeholder: placeholder,
-              suffixIcon: const Icon(
+              suffixIcon: Icon(
                 size: 14,
                 Icons.calendar_month_outlined,
-                color: Colors.grey,
+                color: theme.inputDecorationTheme.iconColor,
               ),
               onTap: () async {
                 if (readonly || disabled) return;

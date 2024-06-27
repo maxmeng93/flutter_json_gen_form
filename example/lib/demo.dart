@@ -48,13 +48,13 @@ class _JsonGenFormPageState extends State<JsonGenFormPage> {
                 config: _data,
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   final formState = _key.currentState as JsonGenFormState;
-                  final data = formState.validate();
-                  if (data == false) {
-                    print('验证错误');
-                  } else {
-                    print('提交成功 $data');
+                  try {
+                    final data = await formState.validate();
+                    debugPrint('提交成功 $data');
+                  } catch (e) {
+                    debugPrint('Validation error: $e');
                   }
                 },
                 child: const Text('提交'),

@@ -1,37 +1,12 @@
-library json_gen_form;
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import './controls/controls.dart';
 import './layouts/layouts.dart';
 import './theme.dart';
-
-class JsonGenFormDecoration {
-  final Widget Function(Widget child)? groupWrapper;
-  final Widget Function({
-    String field,
-    String upField,
-    String label,
-    Widget child,
-  })? groupLabelWrapper;
-  final Widget Function(Widget child)? rowWrapper;
-  final Widget Function({
-    String field,
-    String upField,
-    String label,
-    bool required,
-    Widget child,
-  })? fieldLabelWrapper;
-
-  const JsonGenFormDecoration({
-    this.groupWrapper,
-    this.groupLabelWrapper,
-    this.rowWrapper,
-    this.fieldLabelWrapper,
-  });
-}
+import './model.dart';
 
 abstract class JsonGenFormInterface {
-  dynamic validate();
+  Future<dynamic> validate();
   dynamic getFieldValue(String field);
   void setFieldValue(String field, dynamic value);
 }
@@ -56,61 +31,95 @@ class JsonGenForm extends StatefulWidget {
 
 class JsonGenFormState extends State<JsonGenForm>
     implements JsonGenFormInterface {
+  final JsonGenFormModel _model = JsonGenFormModel();
   final GlobalKey _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _data = {};
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.decoration != null) {
+      _model.decoration = widget.decoration;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = widget.theme ?? JsonGenFormTheme.getTheme(context);
     final List<dynamic> config = widget.config;
 
-    return Theme(
-      data: theme,
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: config.map((item) => _buildField(item)).toList(),
+    return ChangeNotifierProvider.value(
+      value: _model,
+      child: Theme(
+        data: theme,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: config.map((item) => _buildField(item)).toList(),
+          ),
         ),
       ),
     );
   }
 
   Widget _buildField(Map<String, dynamic> config) {
+    late Widget item;
     final type = config['type'];
 
     switch (type) {
       case 'group':
-        return GroupLayout(data: config, buildField: _buildField);
+        item = GroupLayout(data: config, buildField: _buildField);
       case 'row':
-        return RowLayout(data: config, buildField: _buildField);
+        item = RowLayout(data: config, buildField: _buildField);
       case 'text':
       case 'password':
       case 'textarea':
       case 'number':
-        return InputControl(data: config, onChanged: _onChanged);
+        item = InputControl(data: config, onChanged: _onChanged);
       case 'select':
-        return SelectControl(data: config, onChanged: _onChanged);
+        item = SelectControl(data: config, onChanged: _onChanged);
       case 'cascade':
-        return CascadeControl(data: config, onChanged: _onChanged);
+        item = CascadeControl(data: config, onChanged: _onChanged);
       case 'radio':
-        return RadioControl(data: config, onChanged: _onChanged);
+        item = RadioControl(data: config, onChanged: _onChanged);
       case 'checkbox':
-        return CheckboxControl(data: config, onChanged: _onChanged);
+        item = CheckboxControl(data: config, onChanged: _onChanged);
       case 'switch':
-        return SwitchControl(data: config, onChanged: _onChanged);
+        item = SwitchControl(data: config, onChanged: _onChanged);
       case 'date':
       case 'time':
       case 'datetime':
-        return DatetimeControl(data: config, onChanged: _onChanged);
+        item = DatetimeControl(data: config, onChanged: _onChanged);
       case 'media':
-        return MediaControl(
+        item = MediaControl(
           data: config,
           onChanged: _onChanged,
           uploadFile: widget.uploadFile,
         );
       default:
-        return Container();
+        item = Container();
     }
+
+    return _addWrapper(config, item);
+  }
+
+  Widget _addWrapper(dynamic config, Widget child) {
+    final type = config['type'];
+
+    final decoration = widget.decoration;
+    if (decoration != null) {
+      if (type == 'group' && decoration.groupWrap != null) {
+        return decoration.groupWrap!(child, config);
+      }
+      if (type == 'row' && decoration.rowWrap != null) {
+        return decoration.rowWrap!(child, config);
+      }
+      if (decoration.controlWrap != null) {
+        return decoration.controlWrap!(child, config);
+      }
+    }
+
+    return child;
   }
 
   void _onChanged(String field, dynamic value) {
@@ -130,12 +139,13 @@ class JsonGenFormState extends State<JsonGenForm>
   }
 
   @override
-  dynamic validate() {
+  Future<dynamic> validate() async {
     final formState = _formKey.currentState as FormState;
     if (formState.validate()) {
       return _data;
+    } else {
+      throw Exception("Form validation failed");
     }
-    return false;
   }
 
   @override
