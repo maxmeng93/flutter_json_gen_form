@@ -3,44 +3,50 @@ import 'package:flutter/material.dart';
 class JsonGenFormTheme {
   static ThemeData getTheme(BuildContext context) {
     final ThemeData baseTheme = Theme.of(context);
-    final isDark = baseTheme.brightness == Brightness.dark;
+    // final isDark = baseTheme.brightness == Brightness.dark;
     final ColorScheme colorScheme = baseTheme.colorScheme;
     final Color primaryColor = colorScheme.primary;
     final Color errorColor = colorScheme.error;
 
+    final inputBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: const BorderSide(
+        color: Colors.transparent,
+        width: 1,
+      ),
+    );
+
     return baseTheme.copyWith(
-      textTheme: const TextTheme(
+      textTheme: TextTheme(
         /// field body style
         bodySmall: TextStyle(
           height: 1.2,
           fontSize: 10,
-          color: Colors.white,
+          color: colorScheme.onSurface,
         ),
 
         /// group label
         labelMedium: TextStyle(
           height: 1.5,
           fontSize: 14,
-          color: Colors.white,
+          color: colorScheme.onSurface,
         ),
 
         /// field label
         labelSmall: TextStyle(
           height: 1.5,
           fontSize: 12,
-          color: Colors.white,
+          color: colorScheme.onSurface,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: isDark
-            ? const Color(0xff0F1719).withOpacity(0.5)
-            : const Color(0xfff5f5f5),
+        fillColor: colorScheme.surfaceContainer,
         // 提示文案样式
-        hintStyle: const TextStyle(
+        hintStyle: TextStyle(
           height: 1.2,
           fontSize: 10,
-          color: Colors.grey,
+          color: colorScheme.onSurface.withOpacity(0.5),
         ),
         errorStyle: TextStyle(
           height: 1.3,
@@ -59,12 +65,4 @@ class JsonGenFormTheme {
       ),
     );
   }
-
-  static final inputBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(8),
-    borderSide: const BorderSide(
-      color: Colors.transparent,
-      width: 1,
-    ),
-  );
 }

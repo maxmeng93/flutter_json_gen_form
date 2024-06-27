@@ -74,6 +74,9 @@ class _PickerWrapState extends State<PickerWrap> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    ColorScheme colorScheme = theme.colorScheme;
+
     final double height = headerHeight + itemHeight * 7;
     return Container(
       height: height,
@@ -93,7 +96,7 @@ class _PickerWrapState extends State<PickerWrap> {
                   },
                   child: Text(
                     widget.cancelText ?? '取消',
-                    style: const TextStyle(fontSize: 15, color: Colors.blue),
+                    style: TextStyle(fontSize: 15, color: colorScheme.primary),
                   ),
                 ),
                 Expanded(
@@ -110,7 +113,7 @@ class _PickerWrapState extends State<PickerWrap> {
                   },
                   child: Text(
                     widget.cancelText ?? '确定',
-                    style: const TextStyle(fontSize: 15, color: Colors.blue),
+                    style: TextStyle(fontSize: 15, color: colorScheme.primary),
                   ),
                 ),
               ],

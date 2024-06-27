@@ -10,8 +10,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: JsonGenFormPage(),
+    return MaterialApp(
+      themeMode: ThemeMode.dark,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        // brightness: Brightness.dark,
+        useMaterial3: true,
+      ),
+      home: const JsonGenFormPage(),
     );
   }
 }
