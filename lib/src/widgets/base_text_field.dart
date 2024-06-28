@@ -1,4 +1,6 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import '../model.dart';
 
 class BaseTextField extends StatefulWidget {
   final FormFieldState state;
@@ -8,7 +10,6 @@ class BaseTextField extends StatefulWidget {
   final String? Function(FormFieldState state)? formatValue;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
-  final InputDecoration? inputDecoration;
 
   const BaseTextField({
     super.key,
@@ -19,7 +20,6 @@ class BaseTextField extends StatefulWidget {
     this.formatValue,
     this.prefixIcon,
     this.suffixIcon,
-    this.inputDecoration,
   });
 
   @override
@@ -66,6 +66,10 @@ class _BaseTextFieldState extends State<BaseTextField> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
+    final decoration = Provider.of<JsonGenFormModel>(context).decoration;
+    InputDecoration inputDecoration =
+        decoration?.inputDecoration ?? const InputDecoration();
+
     return TextField(
       controller: _controller,
       enabled: widget.state.widget.enabled,
@@ -76,7 +80,7 @@ class _BaseTextFieldState extends State<BaseTextField> {
           widget.onTap!();
         }
       },
-      decoration: const InputDecoration().copyWith(
+      decoration: inputDecoration.copyWith(
         hintText: widget.placeholder,
         suffixIcon: widget.suffixIcon,
         errorText: widget.state.errorText,

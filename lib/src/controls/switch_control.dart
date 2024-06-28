@@ -60,7 +60,7 @@ class _SwitchControlState extends State<SwitchControl> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FieldLabel(data: widget.data, required: required),
+            ControlLabel(data: widget.data, required: required),
             InnerWrap(state: state, child: _switch(context, state)),
             HelperError(state: state),
           ],

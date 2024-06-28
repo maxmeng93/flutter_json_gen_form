@@ -2,11 +2,11 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../model.dart';
 
-class FieldLabel extends StatelessWidget {
+class ControlLabel extends StatelessWidget {
   final dynamic data;
   final bool required;
 
-  const FieldLabel({
+  const ControlLabel({
     super.key,
     this.data,
     this.required = false,
@@ -20,9 +20,11 @@ class FieldLabel extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    bool isGroup = data['type'] == 'group';
+    final decoration = Provider.of<JsonGenFormModel>(context).decoration;
+    final controlLabelWrap = decoration?.controlLabelWrap;
+
     TextTheme theme = Theme.of(context).textTheme;
-    TextStyle? style = isGroup ? theme.labelMedium : theme.labelSmall;
+    TextStyle? style = decoration?.controlLabelStyle ?? theme.labelSmall;
 
     Widget child = Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,13 +38,7 @@ class FieldLabel extends StatelessWidget {
       ],
     );
 
-    final decoration = Provider.of<JsonGenFormModel>(context).decoration;
-    final groupLabelWrap = decoration?.groupLabelWrap;
-    final controlLabelWrap = decoration?.controlLabelWrap;
-
-    if (isGroup && groupLabelWrap != null) {
-      return groupLabelWrap(child, data);
-    } else if (!isGroup && controlLabelWrap != null) {
+    if (controlLabelWrap != null) {
       return controlLabelWrap(child, data);
     }
     return child;

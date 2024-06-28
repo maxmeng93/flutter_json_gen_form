@@ -1,7 +1,9 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import '../widgets/field_label.dart';
+import '../widgets/control_label.dart';
 import '../validator/validator.dart';
 import '../utils/utils.dart';
+import '../model.dart';
 
 enum InputType {
   text,
@@ -114,11 +116,14 @@ class _InputControlState extends State<InputControl> {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    final decoration = Provider.of<JsonGenFormModel>(context).decoration;
+    InputDecoration inputDecoration =
+        decoration?.inputDecoration ?? const InputDecoration();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FieldLabel(data: widget.data, required: required),
+        ControlLabel(data: widget.data, required: required),
         TextFormField(
           // 初始值
           initialValue: initialValue,
@@ -132,7 +137,7 @@ class _InputControlState extends State<InputControl> {
           readOnly: readonly,
           enabled: !disabled,
           style: textTheme.bodySmall,
-          decoration: const InputDecoration().copyWith(
+          decoration: inputDecoration.copyWith(
             hintText: placeholder,
           ),
           validator: (value) {

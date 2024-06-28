@@ -14,14 +14,12 @@ abstract class JsonGenFormInterface {
 class JsonGenForm extends StatefulWidget {
   final dynamic config;
   final JsonGenFormDecoration? decoration;
-  final ThemeData? theme;
   final Future<String> Function(String filePath, String field)? uploadFile;
 
   const JsonGenForm({
     super.key,
     this.config,
     this.decoration,
-    this.theme,
     this.uploadFile,
   });
 
@@ -45,7 +43,7 @@ class JsonGenFormState extends State<JsonGenForm>
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = widget.theme ?? JsonGenFormTheme.getTheme(context);
+    ThemeData theme = JsonGenFormTheme.getTheme(context);
     final List<dynamic> config = widget.config;
 
     return ChangeNotifierProvider.value(

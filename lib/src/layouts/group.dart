@@ -17,7 +17,7 @@ class GroupLayout extends StatelessWidget {
 
     return Column(
       children: [
-        FieldLabel(data: data),
+        GroupLabel(data: data),
         ...children
             .map(
               (item) {

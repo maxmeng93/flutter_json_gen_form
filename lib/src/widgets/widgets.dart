@@ -1,5 +1,6 @@
 export './base_text_field.dart';
-export './field_label.dart';
+export './control_label.dart';
+export './group_label.dart';
 export './helper_error.dart';
 export './inner_wrap.dart';
 export './single_picker.dart' show showSinglePicker, SinglePickerData;

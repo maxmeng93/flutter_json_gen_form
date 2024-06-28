@@ -34,6 +34,9 @@ class _CheckboxControlState extends State<CheckboxControl> {
   /// item 排列方向
   Axis direction = Axis.horizontal;
 
+  /// 是否垂直排列
+  bool isVertical = false;
+
   /// item 水平间距
   double itemHorizontalSpace = 0;
 
@@ -61,7 +64,7 @@ class _CheckboxControlState extends State<CheckboxControl> {
       label = data['label'];
       initialValue = data['value'] ?? [];
 
-      bool isVertical = data['direction'] == 'vertical';
+      isVertical = data['direction'] == 'vertical';
       direction = isVertical ? Axis.vertical : Axis.horizontal;
       itemHorizontalSpace = data['itemHorizontalSpace'] ?? 16;
       itemVerticalSpace = data['itemVerticalSpace'] ?? 8;
@@ -80,11 +83,11 @@ class _CheckboxControlState extends State<CheckboxControl> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FieldLabel(data: widget.data, required: required),
+            ControlLabel(data: widget.data, required: required),
             InnerWrap(
               state: state,
               child: Wrap(
-                spacing: itemHorizontalSpace,
+                spacing: isVertical ? itemVerticalSpace : itemHorizontalSpace,
                 runSpacing: itemVerticalSpace,
                 direction: direction,
                 children: options!.map((item) {
