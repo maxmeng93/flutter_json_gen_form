@@ -28,6 +28,7 @@ class BaseTextField extends StatefulWidget {
 
 class _BaseTextFieldState extends State<BaseTextField> {
   final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -38,6 +39,7 @@ class _BaseTextFieldState extends State<BaseTextField> {
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -72,6 +74,7 @@ class _BaseTextFieldState extends State<BaseTextField> {
 
     return TextField(
       controller: _controller,
+      focusNode: _focusNode,
       enabled: widget.state.widget.enabled,
       readOnly: widget.readonly!,
       style: textTheme.bodySmall,
@@ -79,6 +82,12 @@ class _BaseTextFieldState extends State<BaseTextField> {
         if (widget.onTap != null) {
           widget.onTap!();
         }
+      },
+      onTapOutside: (PointerDownEvent event) {
+        _focusNode.unfocus();
+      },
+      onEditingComplete: () {
+        FocusScope.of(context).requestFocus(_focusNode);
       },
       decoration: inputDecoration.copyWith(
         hintText: widget.placeholder,

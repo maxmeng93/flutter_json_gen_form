@@ -46,6 +46,7 @@ class InputControl extends StatefulWidget {
 }
 
 class _InputControlState extends State<InputControl> {
+  final FocusNode _focusNode = FocusNode();
   InputType type = InputType.text;
   late String field;
   String? label;
@@ -64,6 +65,12 @@ class _InputControlState extends State<InputControl> {
   void initState() {
     super.initState();
     _initData();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   void _initData() {
@@ -125,6 +132,7 @@ class _InputControlState extends State<InputControl> {
       children: [
         ControlLabel(data: widget.data, required: required),
         TextFormField(
+          focusNode: _focusNode,
           // 初始值
           initialValue: initialValue,
           // 隐藏输入内容
@@ -146,6 +154,12 @@ class _InputControlState extends State<InputControl> {
           },
           onChanged: (value) {
             widget.onChanged(field, _transformValue(value));
+          },
+          onTapOutside: (PointerDownEvent event) {
+            _focusNode.unfocus();
+          },
+          onEditingComplete: () {
+            FocusScope.of(context).requestFocus(_focusNode);
           },
         ),
       ],
