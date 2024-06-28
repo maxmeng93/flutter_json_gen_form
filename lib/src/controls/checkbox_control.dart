@@ -34,8 +34,11 @@ class _CheckboxControlState extends State<CheckboxControl> {
   /// item 排列方向
   Axis direction = Axis.horizontal;
 
-  /// item 间距
-  double itemSpace = 16;
+  /// item 水平间距
+  double itemHorizontalSpace = 0;
+
+  /// item 垂直间距
+  double itemVerticalSpace = 0;
 
   @override
   void initState() {
@@ -58,6 +61,11 @@ class _CheckboxControlState extends State<CheckboxControl> {
       label = data['label'];
       initialValue = data['value'] ?? [];
 
+      bool isVertical = data['direction'] == 'vertical';
+      direction = isVertical ? Axis.vertical : Axis.horizontal;
+      itemHorizontalSpace = data['itemHorizontalSpace'] ?? 16;
+      itemVerticalSpace = data['itemVerticalSpace'] ?? 8;
+
       if (initialValue != null) {
         widget.onChanged(field, initialValue);
       }
@@ -75,7 +83,10 @@ class _CheckboxControlState extends State<CheckboxControl> {
             FieldLabel(data: widget.data, required: required),
             InnerWrap(
               state: state,
-              child: Row(
+              child: Wrap(
+                spacing: itemHorizontalSpace,
+                runSpacing: itemVerticalSpace,
+                direction: direction,
                 children: options!.map((item) {
                   return _item(context, item['label'], item['value'], state);
                 }).toList(),
@@ -101,50 +112,49 @@ class _CheckboxControlState extends State<CheckboxControl> {
     final value = state.value ?? [];
     bool isCheck = value.contains(val);
 
-    return Container(
-      margin: EdgeInsets.only(
-        right: direction == Axis.horizontal ? itemSpace : 0,
-        bottom: direction == Axis.vertical ? itemSpace : 0,
-      ),
-      child: GestureDetector(
-        onTap: () {
-          if (readonly || disabled) return;
+    return GestureDetector(
+      onTap: () {
+        if (readonly || disabled) return;
 
-          if (isCheck) {
-            value.remove(val);
-          } else {
-            value.add(val);
-          }
-          state.didChange(value);
-          widget.onChanged(field, value);
-        },
-        child: Row(
-          children: [
-            Container(
-              width: 10,
-              height: 10,
-              margin: const EdgeInsets.only(right: 4),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(2),
-              ),
-              child: Visibility(
-                visible: isCheck,
-                child: Center(
-                  child: Container(
-                    width: 5,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(1),
-                    ),
+        if (isCheck) {
+          value.remove(val);
+        } else {
+          value.add(val);
+        }
+        state.didChange(value);
+        widget.onChanged(field, value);
+      },
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Container(
+            width: 10,
+            height: 10,
+            margin: const EdgeInsets.only(right: 4),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(2),
+            ),
+            child: Visibility(
+              visible: isCheck,
+              child: Center(
+                child: Container(
+                  width: 5,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(1),
                   ),
                 ),
               ),
             ),
-            if (label != null) Text(label, style: textTheme.bodySmall),
-          ],
-        ),
+          ),
+          if (label != null)
+            Text(
+              label,
+              style: textTheme.bodySmall,
+            ),
+        ],
       ),
     );
   }

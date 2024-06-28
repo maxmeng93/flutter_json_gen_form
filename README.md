@@ -62,19 +62,25 @@
 
 ### radio 单选框
 
-| 字段     | 描述 | 类型      | 默认值  | 必填 |
-| -------- | ---- | --------- | ------- | ---- |
-| type     | 类型 | String    | 'radio' | true |
-| options  | 选项 | List<Map> | []      | -    |
-| 通用参数 | -    | -         | -       | -    |
+| 字段                | 描述         | 类型      | 默认值       | 必填 |
+| ------------------- | ------------ | --------- | ------------ | ---- |
+| type                | 类型         | String    | 'radio'      | true |
+| options             | 选项         | List<Map> | []           | -    |
+| direction           | 选项排列方向 | String    | 'horizontal' | -    |
+| itemHorizontalSpace | 选项水平间距 | double    | 16           | -    |
+| itemVerticalSpace   | 选项垂直间距 | double    | 8            | -    |
+| 通用参数            | -            | -         | -            | -    |
 
 ### checkbox 复选框
 
-| 字段     | 描述 | 类型      | 默认值     | 必填 |
-| -------- | ---- | --------- | ---------- | ---- |
-| type     | 类型 | String    | 'checkbox' | true |
-| options  | 选项 | List<Map> | []         | -    |
-| 通用参数 | -    | -         | -          | -    |
+| 字段                | 描述         | 类型      | 默认值       | 必填 |
+| ------------------- | ------------ | --------- | ------------ | ---- |
+| type                | 类型         | String    | 'checkbox'   | true |
+| options             | 选项         | List<Map> | []           | -    |
+| direction           | 选项排列方向 | String    | 'horizontal' | -    |
+| itemHorizontalSpace | 选项水平间距 | double    | 16           | -    |
+| itemVerticalSpace   | 选项垂直间距 | double    | 8            | -    |
+| 通用参数            | -            | -         | -            | -    |
 
 ### select 下拉框
 
@@ -176,3 +182,8 @@
 - len string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
 - pattern 正则校验
 - message 错误提示信息
+
+## 依赖项
+
+- image_picker
+- fijkplayer
