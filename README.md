@@ -1,4 +1,11 @@
-# 表单生成
+<div align="center">
+<h1>JSON_GEN_FORM</h1>
+
+[English](./README-en.md) · 中文
+
+![](./screenshots/json_gen_form.gif)
+
+</div>
 
 ## 通用参数
 
@@ -182,8 +189,3 @@
 - len string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
 - pattern 正则校验
 - message 错误提示信息
-
-## 依赖项
-
-- image_picker
-- fijkplayer
