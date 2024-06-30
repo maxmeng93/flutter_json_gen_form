@@ -1,4 +1,4 @@
-## 0.1.0
+## 0.1.1
 
 - Generate forms from JSON
 - Custom styles and layouts
