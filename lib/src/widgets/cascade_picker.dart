@@ -114,7 +114,7 @@ class _CascadePickerState extends State<CascadePicker>
 
   List<CascadePickerData> _getItemsChildren(
       List<dynamic> values, List<CascadePickerData> data) {
-    if (values.length == 0) return [];
+    if (values.isEmpty) return [];
 
     var value = values[0];
     var item = data.firstWhere((item) => item.value == value);

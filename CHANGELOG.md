@@ -1,7 +1,7 @@
 ## 0.1.0
 
-- 通过 json 生成表单
-- 自定义样式、布局
-- 支持表单验证
-- 支持表单提交
-- 表单可以分组，无限嵌套
+- Generate forms from JSON
+- Custom styles and layouts
+- Support for form validation
+- Support for form submission
+- Forms can be grouped with unlimited nesting

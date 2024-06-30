@@ -1,191 +1,193 @@
 <div align="center">
 <h1>JSON_GEN_FORM</h1>
 
-[English](./README-en.md) · 中文
+<p>Generate Flutter forms using JSON, featuring a variety of built-in form controls,<br/> support for validation, custom layouts, custom styles, and unlimited nested form grouping.</p>
+
+English · [中文](./README-zh.md)
 
 ![](./screenshots/json_gen_form.gif)
 
 </div>
 
-## 通用参数
+## General Parameters
 
-除 `group`、`row`、`col` 外，其他类型都有以下通用参数。所有类型都有 `extra`。
+Except for `group`, `row`, and `col`, all types have the following general parameters. All types have `extra`.
 
-| 字段        | 描述     | 类型    | 默认值 | 必填 |
-| ----------- | -------- | ------- | ------ | ---- |
-| type        | 类型     | String  | ''     | true |
-| field       | 字段名   | String  | ''     | true |
-| label       | 标签     | String  | -      | -    |
-| hiddenLabel | 隐藏标签 | bool    | false  | -    |
-| value       | 默认值   | dynamic | -      | -    |
-| disabled    | 是否禁用 | bool    | false  | -    |
-| readonly    | 是否只读 | bool    | false  | -    |
-| rules       | 校验规则 | List    | []     | -    |
-| extra       | 额外参数 | dynamic |        | -    |
+| Field       | Description      | Type    | Default Value | Required |
+| ----------- | ---------------- | ------- | ------------- | -------- |
+| type        | Type             | String  | ''            | true     |
+| field       | Field Name       | String  | ''            | true     |
+| label       | Label            | String  | -             | -        |
+| hiddenLabel | Hidden Label     | bool    | false         | -        |
+| value       | Default Value    | dynamic | -             | -        |
+| disabled    | Disabled         | bool    | false         | -        |
+| readonly    | Read-Only        | bool    | false         | -        |
+| rules       | Validation Rules | List    | []            | -        |
+| extra       | Extra Params     | dynamic |               | -        |
 
-## 表单类型
+## Form Types
 
-### group 分组
+### group
 
-| 字段        | 描述     | 类型      | 默认值  | 必填 |
-| ----------- | -------- | --------- | ------- | ---- |
-| type        | 类型     | String    | 'group' | true |
-| field       | 字段名   | String    | ''      | -    |
-| label       | 标签     | String    | ''      | -    |
-| hiddenLabel | 隐藏标签 | bool      | ''      | -    |
-| children    | 子表单   | List<Map> | []      | -    |
+| Field       | Description  | Type      | Default Value | Required |
+| ----------- | ------------ | --------- | ------------- | -------- |
+| type        | Type         | String    | 'group'       | true     |
+| field       | Field Name   | String    | ''            | -        |
+| label       | Label        | String    | ''            | -        |
+| hiddenLabel | Hidden Label | bool      | ''            | -        |
+| children    | Sub-Forms    | List<Map> | []            | -        |
 
-### text 文本框
+### text
 
-| 字段        | 描述 | 类型   | 默认值 | 必填 |
-| ----------- | ---- | ------ | ------ | ---- |
-| type        | 类型 | String | 'text' | true |
-| placeholder | 提示 | String | -      | -    |
-| 通用参数    | -    | -      | -      | -    |
+| Field          | Description | Type   | Default Value | Required |
+| -------------- | ----------- | ------ | ------------- | -------- |
+| type           | Type        | String | 'text'        | true     |
+| placeholder    | Placeholder | String | -             | -        |
+| General Params | -           | -      | -             | -        |
 
-### password 密码框
+### password
 
-| 字段        | 描述 | 类型   | 默认值     | 必填 |
-| ----------- | ---- | ------ | ---------- | ---- |
-| type        | 类型 | String | 'password' | true |
-| placeholder | 提示 | String | -          | -    |
-| 通用参数    | -    | -      | -          | -    |
+| Field          | Description | Type   | Default Value | Required |
+| -------------- | ----------- | ------ | ------------- | -------- |
+| type           | Type        | String | 'password'    | true     |
+| placeholder    | Placeholder | String | -             | -        |
+| General Params | -           | -      | -             | -        |
 
-### textArea 多行文本框
+### textArea
 
-| 字段        | 描述 | 类型   | 默认值     | 必填 |
-| ----------- | ---- | ------ | ---------- | ---- |
-| type        | 类型 | String | 'textArea' | true |
-| placeholder | 提示 | String | -          | -    |
-| 通用参数    | -    | -      | -          | -    |
+| Field          | Description | Type   | Default Value | Required |
+| -------------- | ----------- | ------ | ------------- | -------- |
+| type           | Type        | String | 'textArea'    | true     |
+| placeholder    | Placeholder | String | -             | -        |
+| General Params | -           | -      | -             | -        |
 
-### number 数字
+### number
 
-| 字段        | 描述 | 类型   | 默认值   | 必填 |
-| ----------- | ---- | ------ | -------- | ---- |
-| type        | 类型 | String | 'number' | true |
-| placeholder | 提示 | String | -        | -    |
-| 通用参数    | -    | -      | -        | -    |
+| Field          | Description | Type   | Default Value | Required |
+| -------------- | ----------- | ------ | ------------- | -------- |
+| type           | Type        | String | 'number'      | true     |
+| placeholder    | Placeholder | String | -             | -        |
+| General Params | -           | -      | -             | -        |
 
-### radio 单选框
+### radio
 
-| 字段                | 描述         | 类型      | 默认值       | 必填 |
-| ------------------- | ------------ | --------- | ------------ | ---- |
-| type                | 类型         | String    | 'radio'      | true |
-| options             | 选项         | List<Map> | []           | -    |
-| direction           | 选项排列方向 | String    | 'horizontal' | -    |
-| itemHorizontalSpace | 选项水平间距 | double    | 16           | -    |
-| itemVerticalSpace   | 选项垂直间距 | double    | 8            | -    |
-| 通用参数            | -            | -         | -            | -    |
+| Field               | Description           | Type      | Default Value | Required |
+| ------------------- | --------------------- | --------- | ------------- | -------- |
+| type                | Type                  | String    | 'radio'       | true     |
+| options             | Options               | List<Map> | []            | -        |
+| direction           | Options Direction     | String    | 'horizontal'  | -        |
+| itemHorizontalSpace | Item Horizontal Space | double    | 16            | -        |
+| itemVerticalSpace   | Item Vertical Space   | double    | 8             | -        |
+| General Params      | -                     | -         | -             | -        |
 
-### checkbox 复选框
+### checkbox
 
-| 字段                | 描述         | 类型      | 默认值       | 必填 |
-| ------------------- | ------------ | --------- | ------------ | ---- |
-| type                | 类型         | String    | 'checkbox'   | true |
-| options             | 选项         | List<Map> | []           | -    |
-| direction           | 选项排列方向 | String    | 'horizontal' | -    |
-| itemHorizontalSpace | 选项水平间距 | double    | 16           | -    |
-| itemVerticalSpace   | 选项垂直间距 | double    | 8            | -    |
-| 通用参数            | -            | -         | -            | -    |
+| Field               | Description           | Type      | Default Value | Required |
+| ------------------- | --------------------- | --------- | ------------- | -------- |
+| type                | Type                  | String    | 'checkbox'    | true     |
+| options             | Options               | List<Map> | []            | -        |
+| direction           | Options Direction     | String    | 'horizontal'  | -        |
+| itemHorizontalSpace | Item Horizontal Space | double    | 16            | -        |
+| itemVerticalSpace   | Item Vertical Space   | double    | 8             | -        |
+| General Params      | -                     | -         | -             | -        |
 
-### select 下拉框
+### select
 
-| 字段     | 描述     | 类型      | 默认值   | 必填 |
-| -------- | -------- | --------- | -------- | ---- |
-| type     | 类型     | String    | 'select' | true |
-| options  | 选项     | List<Map> | []       | -    |
-| multiple | 是否多选 | bool      | false    | -    |
-| 通用参数 | -        | -         | -        | -    |
+| Field          | Description     | Type      | Default Value | Required |
+| -------------- | --------------- | --------- | ------------- | -------- |
+| type           | Type            | String    | 'select'      | true     |
+| options        | Options         | List<Map> | []            | -        |
+| multiple       | Multiple Select | bool      | false         | -        |
+| General Params | -               | -         | -             | -        |
 
-### switch 开关
+### switch
 
-| 字段     | 描述 | 类型   | 默认值   | 必填 |
-| -------- | ---- | ------ | -------- | ---- |
-| type     | 类型 | String | 'switch' | true |
-| 通用参数 | -    | -      | -        | -    |
+| Field          | Description | Type   | Default Value | Required |
+| -------------- | ----------- | ------ | ------------- | -------- |
+| type           | Type        | String | 'switch'      | true     |
+| General Params | -           | -      | -             | -        |
 
-### media 多媒体上传
+### media
 
-| 字段      | 描述                          | 类型   | 默认值  | 必填 |
-| --------- | ----------------------------- | ------ | ------- | ---- |
-| type      | 类型                          | String | 'media' | true |
-| mediaType | 媒体类型(media、image、video) | String | 'media' | -    |
-| multiple  | 是否多选                      | bool   | false   | -    |
-| 通用参数  | -                             | -      | -       | -    |
+| Field          | Description                      | Type   | Default Value | Required |
+| -------------- | -------------------------------- | ------ | ------------- | -------- |
+| type           | Type                             | String | 'media'       | true     |
+| mediaType      | Media Type (media, image, video) | String | 'media'       | -        |
+| multiple       | Multiple Uploads                 | bool   | false         | -        |
+| General Params | -                                | -      | -             | -        |
 
-#### ios 配置 info.plist
+#### ios Configuration info.plist
 
 ```
 <key>NSCameraUsageDescription</key>
-<string>需要摄像头拍照或扫码</string>
+<string>Need camera for taking photos or scanning codes</string>
 <key>NSPhotoLibraryUsageDescription</key>
-<string>需要从图库选择照片或视频</string>
+<string>Need access to photo library for selecting photos or videos</string>
 <key>NSMicrophoneUsageDescription</key>
-<string>录制视频需要访问麦克风</string>
+<string>Need microphone access for recording videos</string>
 ```
 
-#### android 配置 AndroidManifest.xml
+#### android Configuration AndroidManifest.xml
 
 ```
 <uses-permission android:name="android.permission.CAMERA" />
 ```
 
-### date 日期选择
+### date
 
-| 字段 | 描述 | 类型   | 默认值 | 必填 |
-| ---- | ---- | ------ | ------ | ---- |
-| type | 类型 | String | 'date' | true |
+| Field | Description | Type   | Default Value | Required |
+| ----- | ----------- | ------ | ------------- | -------- |
+| type  | Type        | String | 'date'        | true     |
 
-### time 时间选择
+### time
 
-| 字段 | 描述 | 类型   | 默认值 | 必填 |
-| ---- | ---- | ------ | ------ | ---- |
-| type | 类型 | String | 'time' | true |
+| Field | Description | Type   | Default Value | Required |
+| ----- | ----------- | ------ | ------------- | -------- |
+| type  | Type        | String | 'time'        | true     |
 
-### datetime 日期时间选择
+### datetime
 
-| 字段 | 描述 | 类型   | 默认值     | 必填 |
-| ---- | ---- | ------ | ---------- | ---- |
-| type | 类型 | String | 'datetime' | true |
+| Field | Description | Type   | Default Value | Required |
+| ----- | ----------- | ------ | ------------- | -------- |
+| type  | Type        | String | 'datetime'    | true     |
 
-## 布局类型
+## Layout Types
 
-### row 行
+### row
 
-`row` 的 `children` 的 `type` 必须为 `col`。
+`row`'s `children` must have `type` as `col`.
 
-| 字段     | 描述       | 类型   | 默认值 | 必填 |
-| -------- | ---------- | ------ | ------ | ---- |
-| type     | 类型       | String | 'row'  | true |
-| gutter   | 子元素间距 | double | 0      | -    |
-| children | 子元素列表 | List   | []     | -    |
+| Field    | Description | Type   | Default Value | Required |
+| -------- | ----------- | ------ | ------------- | -------- |
+| type     | Type        | String | 'row'         | true     |
+| gutter   | Spacing     | double | 0             | -        |
+| children | Children    | List   | []            | -        |
 
-### col 列
+### col
 
-`col` 的父元素必须为 `row`。
+`col`'s parent must be `row`.
 
-| 字段  | 描述       | 类型   | 默认值 | 必填 |
-| ----- | ---------- | ------ | ------ | ---- |
-| type  | 类型       | String | 'col'  | true |
-| flex  | 空间大小   | int    | 1      | -    |
-| child | 子元素配置 | Map    |        |      |
+| Field | Description  | Type   | Default Value | Required |
+| ----- | ------------ | ------ | ------------- | -------- |
+| type  | Type         | String | 'col'         | true     |
+| flex  | Flex         | int    | 1             | -        |
+| child | Child Config | Map    |               |          |
 
-### group 分组
+### group
 
-| 字段  | 描述   | 类型   | 默认值  | 必填 |
-| ----- | ------ | ------ | ------- | ---- |
-| type  | 类型   | String | 'group' | true |
-| field | 字段名 | String | null    | -    |
+| Field | Description | Type   | Default Value | Required |
+| ----- | ----------- | ------ | ------------- | -------- |
+| type  | Type        | String | 'group'       | true     |
+| field | Field Name  | String | null          | -        |
 
-## 验证规则
+## Validation Rules
 
-- required 必填
-- type 快捷校验类型，仅支持文本输入框
-  - email 邮箱
-  - url 网址
-- min string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
-- max string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
-- len string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
-- pattern 正则校验
-- message 错误提示信息
+- required
+- type: Shortcut validation type, only supported for text input
+  - email
+  - url
+- min: For string type, it's string length; for number type, it's a specific number; for array type, it's array length
+- max: For string type, it's string length; for number type, it's a specific number; for array type, it's array length
+- len: For string type, it's string length; for number type, it's a specific number; for array type, it's array length
+- pattern: Regex validation
+- message: Error message
