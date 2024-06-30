@@ -1,6 +1,6 @@
 name: json_gen_form
 description: "json to form generator for flutter."
-version: 0.0.1
+version: 0.1.0
 repository: "https://github.com/maxmeng93/flutter_json_gen_form"
 
 environment:

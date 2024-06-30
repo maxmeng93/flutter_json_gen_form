@@ -101,12 +101,15 @@ class _SelectMultimediaState extends State<SelectMultimedia> {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    Color bgColor = colorScheme.surfaceContainerHigh;
+
     return Container(
       width: double.infinity,
       height: 200,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
+        color: bgColor,
       ),
       child: SafeArea(
         bottom: true,
@@ -118,7 +121,7 @@ class _SelectMultimediaState extends State<SelectMultimedia> {
             _item('从手机相册选择', (context) {
               _pick(context);
             }),
-            Container(color: const Color(0xfff3f5f7), height: 10),
+            Container(color: colorScheme.surfaceContainerHighest, height: 10),
             _item('取消', (context) {
               Navigator.of(context).pop();
             }),
@@ -129,13 +132,15 @@ class _SelectMultimediaState extends State<SelectMultimedia> {
   }
 
   _item(String text, Function(BuildContext context) onTap) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       child: SizedBox(
         height: 50,
         child: Center(
           child: Text(
             text,
-            style: const TextStyle(color: Colors.black),
+            style: TextStyle(color: colorScheme.onSurface),
           ),
         ),
       ),

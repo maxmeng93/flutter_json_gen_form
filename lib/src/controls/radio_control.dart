@@ -111,6 +111,7 @@ class _RadioControlState extends State<RadioControl> {
     dynamic val,
     FormFieldState state,
   ) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
     final value = state.value;
     bool isCheck = value != null && val == value;
@@ -129,7 +130,7 @@ class _RadioControlState extends State<RadioControl> {
             height: 10,
             margin: const EdgeInsets.only(right: 4),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.white),
+              border: Border.all(color: colorScheme.inverseSurface),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Visibility(
@@ -139,7 +140,7 @@ class _RadioControlState extends State<RadioControl> {
                   width: 5,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: colorScheme.inverseSurface,
                     borderRadius: BorderRadius.circular(2.5),
                   ),
                 ),

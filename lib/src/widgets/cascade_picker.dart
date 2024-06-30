@@ -141,15 +141,19 @@ class _CascadePickerState extends State<CascadePicker>
   Widget build(BuildContext context) {
     final double height = headerHeight + itemHeight * 8;
 
+    ThemeData theme = Theme.of(context);
+    ColorScheme colorScheme = theme.colorScheme;
+    Color bgColor = colorScheme.surfaceContainerHigh;
+
     return Container(
       height: height,
-      color: Colors.white,
+      color: bgColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             height: headerHeight,
-            color: Colors.white,
+            color: bgColor,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,7 +164,7 @@ class _CascadePickerState extends State<CascadePicker>
                   },
                   child: Text(
                     widget.cancelText ?? '取消',
-                    style: const TextStyle(fontSize: 15, color: Colors.blue),
+                    style: TextStyle(fontSize: 15, color: colorScheme.primary),
                   ),
                 ),
                 Expanded(
@@ -177,7 +181,7 @@ class _CascadePickerState extends State<CascadePicker>
                   },
                   child: Text(
                     widget.cancelText ?? '确定',
-                    style: const TextStyle(fontSize: 15, color: Colors.blue),
+                    style: TextStyle(fontSize: 15, color: colorScheme.primary),
                   ),
                 ),
               ],
@@ -189,13 +193,13 @@ class _CascadePickerState extends State<CascadePicker>
             isScrollable: true,
             tabAlignment: TabAlignment.start,
             dividerHeight: 0.5,
-            dividerColor: Colors.grey[300],
-            labelColor: Colors.blue,
+            dividerColor: colorScheme.onSurface.withOpacity(0.30),
+            labelColor: colorScheme.primary,
             // 每个label的左右填充
             labelPadding: const EdgeInsets.symmetric(horizontal: 12),
-            unselectedLabelColor: Colors.grey,
+            unselectedLabelColor: colorScheme.onSurface,
             indicatorSize: TabBarIndicatorSize.label,
-            indicatorColor: Colors.blue,
+            indicatorColor: colorScheme.primary,
             onTap: (index) {
               setState(() {
                 _tabIndex = index;
@@ -216,6 +220,7 @@ class _CascadePickerState extends State<CascadePicker>
   }
 
   Widget _item(int index) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     CascadePickerData item = _curTabOptions[index];
     if (index < 0) return const SizedBox.shrink();
 
@@ -266,7 +271,6 @@ class _CascadePickerState extends State<CascadePicker>
       },
       child: Container(
         height: itemHeight,
-        color: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -276,7 +280,7 @@ class _CascadePickerState extends State<CascadePicker>
               item.label,
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.black.withOpacity(0.5),
+                color: colorScheme.onSurface,
               ),
             ),
           ],

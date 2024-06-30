@@ -73,7 +73,9 @@ class _SwitchControlState extends State<SwitchControl> {
   }
 
   Widget _switch(BuildContext context, FormFieldState state) {
-    Color primaryColor = Theme.of(context).colorScheme.primary;
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    Color surfaceContainer = colorScheme.surfaceContainer;
+    Color primaryColor = colorScheme.primary;
     bool isCheck = state.value;
 
     return GestureDetector(
@@ -91,8 +93,8 @@ class _SwitchControlState extends State<SwitchControl> {
               width: 32,
               height: 16,
               decoration: BoxDecoration(
-                color: isCheck ? primaryColor : Colors.grey,
-                border: Border.all(color: isCheck ? primaryColor : Colors.grey),
+                color: isCheck ? primaryColor : surfaceContainer,
+                border: Border.all(color: isCheck ? primaryColor : surfaceContainer),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),

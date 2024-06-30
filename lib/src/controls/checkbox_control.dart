@@ -111,6 +111,7 @@ class _CheckboxControlState extends State<CheckboxControl> {
     dynamic val,
     FormFieldState state,
   ) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     TextTheme textTheme = Theme.of(context).textTheme;
     final value = state.value ?? [];
     bool isCheck = value.contains(val);
@@ -135,7 +136,7 @@ class _CheckboxControlState extends State<CheckboxControl> {
             height: 10,
             margin: const EdgeInsets.only(right: 4),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.white),
+              border: Border.all(color: colorScheme.inverseSurface),
               borderRadius: BorderRadius.circular(2),
             ),
             child: Visibility(
@@ -145,7 +146,7 @@ class _CheckboxControlState extends State<CheckboxControl> {
                   width: 5,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: colorScheme.inverseSurface,
                     borderRadius: BorderRadius.circular(1),
                   ),
                 ),

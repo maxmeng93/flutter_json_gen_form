@@ -74,18 +74,18 @@ class _PickerWrapState extends State<PickerWrap> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    ColorScheme colorScheme = theme.colorScheme;
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    Color bgColor = colorScheme.surfaceContainerHigh;
 
     final double height = headerHeight + itemHeight * 7;
     return Container(
       height: height,
-      color: Colors.white,
+      color: bgColor,
       child: Column(
         children: <Widget>[
           Container(
             height: headerHeight,
-            color: Colors.white,
+            color: bgColor,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,7 +103,7 @@ class _PickerWrapState extends State<PickerWrap> {
                   child: Center(
                     child: Text(
                       widget.title ?? '',
-                      style: const TextStyle(fontSize: 15, color: Colors.black),
+                      style: TextStyle(fontSize: 15, color: colorScheme.onSurface),
                     ),
                   ),
                 ),
@@ -196,6 +196,8 @@ class _SinglePickerState extends State<SinglePicker> {
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
+    Color bgColor = colorScheme.surfaceContainerHigh;
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -231,7 +233,7 @@ class _SinglePickerState extends State<SinglePicker> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.white, Colors.white.withOpacity(0)],
+                  colors: [bgColor, bgColor.withOpacity(0)],
                 ),
               ),
             ),
@@ -248,7 +250,7 @@ class _SinglePickerState extends State<SinglePicker> {
                 gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  colors: [Colors.white, Colors.white.withOpacity(0.5)],
+                  colors: [bgColor, bgColor.withOpacity(0.5)],
                 ),
               ),
             ),
@@ -259,6 +261,7 @@ class _SinglePickerState extends State<SinglePicker> {
   }
 
   Widget buildList() {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     return ScrollConfiguration(
       behavior: NoWaveBehavior(),
       child: ListWheelScrollView.useDelegate(
@@ -280,7 +283,7 @@ class _SinglePickerState extends State<SinglePicker> {
                 child: Text(
                   _options[index].label.toString(),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                  style: TextStyle(fontSize: 16, color: colorScheme.onSurface),
                 ),
               ),
             );

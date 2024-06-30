@@ -130,6 +130,8 @@ class _MediaControlState extends State<MediaControl> {
   }
 
   Widget _addMedia(FormFieldState state) {
+    ThemeData theme = Theme.of(context);
+    ColorScheme colorScheme = theme.colorScheme;
     MultimediaTypeEnum type = MultimediaTypeEnum.media;
     for (var item in MultimediaTypeEnum.values) {
       if (item.name == mediaType) {
@@ -166,11 +168,10 @@ class _MediaControlState extends State<MediaControl> {
       child: Container(
         height: 100,
         decoration: BoxDecoration(
-          color: Colors.black12,
-          border: Border.all(color: Colors.grey.withOpacity(0.5)),
+          color: colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Icon(Icons.add, color: Colors.grey),
+        child: Icon(Icons.add, color: colorScheme.inverseSurface),
       ),
     );
   }
