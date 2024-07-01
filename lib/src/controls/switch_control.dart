@@ -94,7 +94,9 @@ class _SwitchControlState extends State<SwitchControl> {
               height: 16,
               decoration: BoxDecoration(
                 color: isCheck ? primaryColor : surfaceContainer,
-                border: Border.all(color: isCheck ? primaryColor : surfaceContainer),
+                border: Border.all(
+                  color: isCheck ? primaryColor : surfaceContainer,
+                ),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
