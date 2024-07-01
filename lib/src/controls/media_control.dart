@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:defer_pointer/defer_pointer.dart';
 import '../widgets/widgets.dart';
 import '../layouts/layouts.dart';
@@ -285,7 +284,7 @@ class _MediaControlState extends State<MediaControl> {
           ),
         );
       },
-      child: AbsorbPointer(child: VideoPlayer(uri: url)),
+      child: AbsorbPointer(child: VideoPlayerWrap(uri: url)),
     );
   }
 }
@@ -308,49 +307,10 @@ class PhotoViewRouteWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            constraints: BoxConstraints.expand(
-              height: MediaQuery.of(context).size.height,
-            ),
-            child: PhotoView(
-              imageProvider: imageProvider,
-              backgroundDecoration: backgroundDecoration,
-              minScale: minScale,
-              maxScale: maxScale,
-              errorBuilder: (
-                BuildContext context,
-                Object error,
-                StackTrace? stackTrace,
-              ) {
-                return const Center(
-                  child: Text(
-                    '图片加载失败',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              },
-            ),
-          ),
-          // 关闭按钮
-          Positioned(
-            top: 40,
-            left: 20,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                child: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
+      body: Center(
+        child: Image(
+          image: imageProvider,
+        ),
       ),
     );
   }
@@ -373,12 +333,11 @@ class VideoPlayerRouteWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: SizedBox(
-          height: 200,
-          child: VideoPlayer(uri: url, autoPlay: true),
-        ),
+      backgroundColor: Colors.black,
+      body: VideoPlayerWrap(
+        uri: url,
+        autoPlay: true,
+        fullScreen: true,
       ),
     );
   }
