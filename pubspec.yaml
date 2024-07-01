@@ -22,6 +22,11 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^3.0.0
 
+topics:
+  - form 
+  - validation
+  - generator
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
