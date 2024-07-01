@@ -53,11 +53,11 @@ Except for `group`, `row`, and `col`, all types have the following general param
 | placeholder    | Placeholder | String | -             | -        |
 | General Params | -           | -      | -             | -        |
 
-### textArea
+### textarea
 
 | Field          | Description | Type   | Default Value | Required |
 | -------------- | ----------- | ------ | ------------- | -------- |
-| type           | Type        | String | 'textArea'    | true     |
+| type           | Type        | String | 'textarea'    | true     |
 | placeholder    | Placeholder | String | -             | -        |
 | General Params | -           | -      | -             | -        |
 
