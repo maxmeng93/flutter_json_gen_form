@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:defer_pointer/defer_pointer.dart';
 import '../widgets/widgets.dart';
 import '../layouts/layouts.dart';
 import '../validator/validator.dart';
@@ -181,47 +182,55 @@ class _MediaControlState extends State<MediaControl> {
     List<String> imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
     bool isImage = imageExtensions.contains(extension);
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          height: 100,
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.circular(8),
+    return DeferredPointerHandler(
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: isImage ? _renderImage(url) : _renderVideo(url),
           ),
-          child: isImage ? _renderImage(url) : _renderVideo(url),
-        ),
-        Visibility(
-          visible: !onlyWatch,
-          child: Positioned(
-            top: -5,
-            right: -5,
-            child: GestureDetector(
-              onTap: () {
-                if (multiple) {
-                  List<String> all = [...state.value ?? []];
-                  all.remove(url);
-                  state.didChange(all);
-                  widget.onChanged(field, all);
-                } else {
-                  state.didChange(null);
-                  widget.onChanged(field, null);
-                }
-              },
-              child: Container(
-                width: 14,
-                height: 14,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(7),
+          Visibility(
+            visible: !onlyWatch,
+            child: Positioned(
+              top: -5,
+              right: -5,
+              child: DeferPointer(
+                child: GestureDetector(
+                  onTap: () {
+                    if (multiple) {
+                      List<String> all = [...state.value ?? []];
+                      all.remove(url);
+                      state.didChange(all);
+                      widget.onChanged(field, all);
+                    } else {
+                      state.didChange(null);
+                      widget.onChanged(field, null);
+                    }
+                  },
+                  child: Container(
+                    width: 14,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 12,
+                    ),
+                  ),
                 ),
-                child: const Icon(Icons.close, color: Colors.white, size: 12),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

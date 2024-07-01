@@ -231,6 +231,7 @@
     "field": "media",
     "label": "上传照片视频",
     "value": null,
-    "rules": null
+    "rules": null,
+    "multiple": true
   }
 ]
