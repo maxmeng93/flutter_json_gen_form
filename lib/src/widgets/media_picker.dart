@@ -135,6 +135,7 @@ class _SelectMultimediaState extends State<SelectMultimedia> {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       child: SizedBox(
         height: 50,
         child: Center(

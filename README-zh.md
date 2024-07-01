@@ -52,11 +52,11 @@
 | placeholder | 提示 | String | -          | -    |
 | 通用参数    | -    | -      | -          | -    |
 
-### textArea 多行文本框
+### textarea 多行文本框
 
 | 字段        | 描述 | 类型   | 默认值     | 必填 |
 | ----------- | ---- | ------ | ---------- | ---- |
-| type        | 类型 | String | 'textArea' | true |
+| type        | 类型 | String | 'textarea' | true |
 | placeholder | 提示 | String | -          | -    |
 | 通用参数    | -    | -      | -          | -    |
 

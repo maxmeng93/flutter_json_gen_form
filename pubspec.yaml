@@ -1,6 +1,6 @@
 name: json_gen_form
 description: "Generate Flutter forms using JSON, featuring a variety of built-in form controls, support for validation, custom layouts, custom styles, and unlimited nested form grouping."
-version: 0.1.1
+version: 0.1.2
 repository: "https://github.com/maxmeng93/flutter_json_gen_form"
 
 environment:
@@ -10,17 +10,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.19.0
   provider: ^6.0.5
   image_picker: ^1.1.0
-  fijkplayer: ^0.11.0
-  photo_view: ^0.15.0
+  video_player: ^2.9.1
   omni_datetime_picker: ^2.0.1
-  intl: ^0.19.0
+  defer_pointer: ^0.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+
+topics:
+  - form 
+  - validation
+  - generator
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

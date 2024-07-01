@@ -1,3 +1,7 @@
+## 0.1.2
+
+- Optimize media selector and preview functionality
+
 ## 0.1.1
 
 - Generate forms from JSON

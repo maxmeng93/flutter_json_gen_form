@@ -103,7 +103,10 @@ class _PickerWrapState extends State<PickerWrap> {
                   child: Center(
                     child: Text(
                       widget.title ?? '',
-                      style: TextStyle(fontSize: 15, color: colorScheme.onSurface),
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: colorScheme.onSurface,
+                      ),
                     ),
                   ),
                 ),
