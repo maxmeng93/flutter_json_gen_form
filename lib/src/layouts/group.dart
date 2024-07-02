@@ -16,6 +16,7 @@ class GroupLayout extends StatelessWidget {
     List<dynamic> children = data['children'] ?? [];
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GroupLabel(data: data),
         ...children
