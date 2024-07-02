@@ -4,8 +4,13 @@ import '../model.dart';
 
 class BaseTextField extends StatefulWidget {
   final FormFieldState state;
+  final bool? obscureText;
+  final TextInputType? keyboardType;
+  final int? minLines;
+  final int? maxLines;
   final bool? readonly;
   final void Function()? onTap;
+  final void Function(String value)? onChanged;
   final String? placeholder;
   final String? Function(FormFieldState state)? formatValue;
   final Widget? prefixIcon;
@@ -14,8 +19,13 @@ class BaseTextField extends StatefulWidget {
   const BaseTextField({
     super.key,
     required this.state,
+    this.obscureText,
+    this.keyboardType,
+    this.minLines,
+    this.maxLines,
     this.readonly = false,
     this.onTap,
+    this.onChanged,
     this.placeholder,
     this.formatValue,
     this.prefixIcon,
@@ -78,6 +88,15 @@ class _BaseTextFieldState extends State<BaseTextField> {
       enabled: widget.state.widget.enabled,
       readOnly: widget.readonly!,
       style: textTheme.bodySmall,
+      obscureText: widget.obscureText ?? false,
+      keyboardType: widget.keyboardType,
+      minLines: widget.minLines,
+      maxLines: widget.maxLines,
+      onChanged: (value) {
+        if (widget.onChanged != null) {
+          widget.onChanged!(value);
+        }
+      },
       onTap: () {
         if (widget.onTap != null) {
           widget.onTap!();

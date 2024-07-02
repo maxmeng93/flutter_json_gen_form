@@ -1,9 +1,7 @@
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import '../widgets/control_label.dart';
+import '../widgets/widgets.dart';
 import '../validator/validator.dart';
 import '../utils/utils.dart';
-import '../model.dart';
 
 enum InputType {
   text,
@@ -122,47 +120,40 @@ class _InputControlState extends State<InputControl> {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    final decoration = Provider.of<JsonGenFormModel>(context).decoration;
-    InputDecoration inputDecoration =
-        decoration?.inputDecoration ?? const InputDecoration();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ControlLabel(data: widget.data, required: required),
-        TextFormField(
-          focusNode: _focusNode,
-          // 初始值
-          initialValue: initialValue,
-          // 隐藏输入内容
-          obscureText: obscureText,
-          // 键盘类型
-          keyboardType: keyboardType,
-          // 多行
-          minLines: minLines,
-          maxLines: maxLines,
-          readOnly: readonly,
-          enabled: !disabled,
-          style: textTheme.bodySmall,
-          decoration: inputDecoration.copyWith(
-            hintText: placeholder,
-          ),
-          validator: (value) {
-            dynamic val = _transformValue(value);
-            return validator(label, val, rules);
-          },
-          onChanged: (value) {
-            widget.onChanged(field, _transformValue(value));
-          },
-          onTapOutside: (PointerDownEvent event) {
-            _focusNode.unfocus();
-          },
-          onEditingComplete: () {
-            FocusScope.of(context).requestFocus(_focusNode);
-          },
-        ),
-      ],
+    return FormField(
+      initialValue: initialValue,
+      enabled: !disabled,
+      validator: (value) {
+        dynamic val = _transformValue(value);
+        return validator(label, val, rules);
+      },
+      builder: (FormFieldState state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ControlLabel(data: widget.data, required: required),
+            BaseTextField(
+              state: state,
+              obscureText: obscureText,
+              keyboardType: keyboardType,
+              minLines: minLines,
+              maxLines: maxLines,
+              readonly: readonly,
+              placeholder: placeholder,
+              formatValue: (FormFieldState state) {
+                return state.value;
+              },
+              onTap: () {
+                if (readonly || disabled) return;
+              },
+              onChanged: (value) {
+                widget.onChanged(field, _transformValue(value));
+                state.didChange(value);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
