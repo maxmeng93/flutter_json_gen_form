@@ -99,7 +99,7 @@ class _CascadeControlState extends State<CascadeControl> {
             ControlLabel(data: widget.data, required: required),
             BaseTextField(
               state: state,
-              readonly: readonly,
+              readonly: true,
               placeholder: placeholder,
               suffixIcon: Icon(
                 Icons.arrow_drop_down,

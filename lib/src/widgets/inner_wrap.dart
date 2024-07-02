@@ -8,9 +8,8 @@ class InnerWrap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
       child: child,
     );
   }

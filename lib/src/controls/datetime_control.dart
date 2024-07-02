@@ -78,7 +78,7 @@ class _DatetimeControlState extends State<DatetimeControl> {
             ControlLabel(data: widget.data, required: required),
             BaseTextField(
               state: state,
-              readonly: readonly,
+              readonly: true,
               placeholder: placeholder,
               suffixIcon: Icon(
                 size: 14,

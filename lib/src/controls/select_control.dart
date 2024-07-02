@@ -82,7 +82,7 @@ class _SelectControlState extends State<SelectControl> {
             ControlLabel(data: widget.data, required: required),
             BaseTextField(
               state: state,
-              readonly: readonly,
+              readonly: true,
               placeholder: placeholder,
               suffixIcon: Icon(
                 Icons.arrow_drop_down,

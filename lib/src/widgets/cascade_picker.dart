@@ -67,7 +67,6 @@ class _CascadePickerState extends State<CascadePicker>
   List<Tab> _tabs = [];
   List<List<CascadePickerData>> _tabsOptions = [];
   List<dynamic> _value = [];
-  final List<int> _positions = [];
   int _tabIndex = -1;
 
   List<CascadePickerData> get _curTabOptions {
@@ -123,18 +122,6 @@ class _CascadePickerState extends State<CascadePicker>
     return item.children != null
         ? [item, ..._getItemsChildren(values.sublist(1), item.children!)]
         : [];
-  }
-
-  void _changeValue() {
-    List<dynamic> newValue = [];
-    if (_positions.isNotEmpty) {
-      for (int i = 0; i < _positions.length; i++) {
-        newValue.add(_tabsOptions[i][_positions[i]].value);
-      }
-    }
-    setState(() {
-      _value = newValue;
-    });
   }
 
   @override
@@ -228,11 +215,11 @@ class _CascadePickerState extends State<CascadePicker>
       onTap: () {
         setState(() {
           int newLength = _tabIndex + 1;
-          if (_positions.length > _tabIndex) {
-            _positions[_tabIndex] = index;
-            _positions.length = newLength;
+          if (_value.length > _tabIndex) {
+            _value[_tabIndex] = item.value;
+            _value.length = newLength;
           } else {
-            _positions.add(index);
+            _value.add(item.value);
           }
           _tabs[_tabIndex] = Tab(text: item.label, height: itemHeight);
 
@@ -265,8 +252,6 @@ class _CascadePickerState extends State<CascadePicker>
             _tabController = TabController(vsync: this, length: newLength);
             _tabController?.index = newLength - 1;
           }
-
-          _changeValue();
         });
       },
       child: Container(

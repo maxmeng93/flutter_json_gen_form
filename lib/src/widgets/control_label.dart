@@ -26,16 +26,18 @@ class ControlLabel extends StatelessWidget {
     TextTheme theme = Theme.of(context).textTheme;
     TextStyle? style = decoration?.controlLabelStyle ?? theme.labelSmall;
 
-    Widget child = Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(label, style: style),
-        const SizedBox(width: 3),
-        Visibility(
-          visible: required,
-          child: const Text('*', style: TextStyle(color: Colors.red)),
-        ),
-      ],
+    Widget child = RichText(
+      text: TextSpan(
+        style: style,
+        children: [
+          TextSpan(text: label),
+          if (required)
+            const TextSpan(
+              text: ' *',
+              style: TextStyle(color: Colors.red),
+            ),
+        ],
+      ),
     );
 
     if (controlLabelWrap != null) {
