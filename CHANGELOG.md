@@ -1,3 +1,7 @@
+## 0.1.3
+
+- Optimize features and fix bugs
+
 ## 0.1.2
 
 - Optimize media selector and preview functionality
