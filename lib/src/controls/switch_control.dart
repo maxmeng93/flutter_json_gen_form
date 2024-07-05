@@ -47,8 +47,6 @@ class _SwitchControlState extends State<SwitchControl> {
       field = getField(data);
       label = data['label'];
       initialValue = data['value'] ?? false;
-
-      widget.onChanged(field, initialValue);
     });
   }
 

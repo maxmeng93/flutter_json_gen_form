@@ -2,6 +2,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import './controls/controls.dart';
 import './layouts/layouts.dart';
+import './utils/utils.dart' show getField;
 import './theme.dart';
 import './model.dart';
 
@@ -18,6 +19,9 @@ class JsonGenForm extends StatefulWidget {
   /// 自定义表单样式
   final JsonGenFormDecoration? decoration;
 
+  /// 表单数据变化时的回调
+  final void Function(Map data)? onChanged;
+
   /// 上传文件方法
   /// 如果不提供此方法，则多媒体等控件返回的为相对于本设备的路径
   final Future<String> Function(String filePath, String field)? uploadFile;
@@ -26,6 +30,7 @@ class JsonGenForm extends StatefulWidget {
     super.key,
     this.config,
     this.decoration,
+    this.onChanged,
     this.uploadFile,
   });
 
@@ -69,6 +74,16 @@ class JsonGenFormState extends State<JsonGenForm>
   Widget _buildField(Map<String, dynamic> config) {
     late Widget item;
     final type = config['type'];
+
+    if (type != 'group' && type != 'row') {
+      String field = getField(config);
+      dynamic value = config['value'];
+      if (type == 'switch') {
+        _setFieldValue(field, value ?? false);
+      } else if (value != null) {
+        _setFieldValue(field, value);
+      }
+    }
 
     switch (type) {
       case 'group':
@@ -126,7 +141,8 @@ class JsonGenFormState extends State<JsonGenForm>
     return child;
   }
 
-  void _onChanged(String field, dynamic value) {
+  /// 设置字段的值
+  void _setFieldValue(String field, dynamic value) {
     List<String> keys = field.split('.');
     Map<String, dynamic> cur = _data;
 
@@ -138,8 +154,14 @@ class JsonGenFormState extends State<JsonGenForm>
     }
 
     cur[keys.last] = value;
+  }
 
-    debugPrint('data: $_data');
+  void _onChanged(String field, dynamic value) {
+    _setFieldValue(field, value);
+
+    if (widget.onChanged != null) {
+      widget.onChanged!(_data);
+    }
   }
 
   @override
@@ -167,6 +189,6 @@ class JsonGenFormState extends State<JsonGenForm>
 
   @override
   void setFieldValue(String field, dynamic value) {
-    _onChanged(field, value);
+    _setFieldValue(field, value);
   }
 }

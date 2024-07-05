@@ -68,10 +68,6 @@ class _RadioControlState extends State<RadioControl> {
       direction = isVertical ? Axis.vertical : Axis.horizontal;
       itemHorizontalSpace = data['itemHorizontalSpace'] ?? 16;
       itemVerticalSpace = data['itemVerticalSpace'] ?? 8;
-
-      if (initialValue != null) {
-        widget.onChanged(field, initialValue);
-      }
     });
   }
 
