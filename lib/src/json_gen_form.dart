@@ -112,7 +112,7 @@ class JsonGenFormState extends State<JsonGenForm>
       if (type == 'row' && decoration.rowWrap != null) {
         return decoration.rowWrap!(child, config);
       }
-      if (decoration.controlWrap != null) {
+      if (decoration.controlWrap != null && type != 'group' && type != 'row') {
         return decoration.controlWrap!(child, config);
       }
     }
