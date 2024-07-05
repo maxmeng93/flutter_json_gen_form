@@ -12,8 +12,14 @@ abstract class JsonGenFormInterface {
 }
 
 class JsonGenForm extends StatefulWidget {
+  /// json config
   final dynamic config;
+
+  /// 自定义表单样式
   final JsonGenFormDecoration? decoration;
+
+  /// 上传文件方法
+  /// 如果不提供此方法，则多媒体等控件返回的为相对于本设备的路径
   final Future<String> Function(String filePath, String field)? uploadFile;
 
   const JsonGenForm({
