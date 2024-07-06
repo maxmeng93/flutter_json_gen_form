@@ -1,3 +1,9 @@
+## 0.2.0
+
+- Add onChanged parameter
+- Modify example code
+- Optimize logic and fix bugs
+
 ## 0.1.3
 
 - Optimize features and fix bugs
