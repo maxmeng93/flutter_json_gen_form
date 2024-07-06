@@ -56,10 +56,6 @@ class _MediaControlState extends State<MediaControl> {
       label = data['label'];
       initialValue = data['value'];
       mediaType = data['mediaType'] ?? 'media';
-
-      if (initialValue != null) {
-        widget.onChanged(field, initialValue);
-      }
     });
   }
 
