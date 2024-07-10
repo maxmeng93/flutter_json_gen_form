@@ -7,9 +7,17 @@ import './theme.dart';
 import './model.dart';
 
 abstract class JsonGenFormInterface {
+  /// 表单验证
   Future<dynamic> validate();
+
+  /// 获取单个表单控件的值
   dynamic getFieldValue(String field);
+
+  /// 设置单个表单控件的值
   void setFieldValue(String field, dynamic value);
+
+  /// 设置整个表单的值
+  void setValues(dynamic value);
 }
 
 class JsonGenForm extends StatefulWidget {
@@ -43,6 +51,7 @@ class JsonGenFormState extends State<JsonGenForm>
   final JsonGenFormModel _model = JsonGenFormModel();
   final GlobalKey _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _data = {};
+  final Map<String, GlobalKey> _keys = {};
 
   @override
   void initState() {
@@ -72,11 +81,13 @@ class JsonGenFormState extends State<JsonGenForm>
   }
 
   Widget _buildField(Map<String, dynamic> config) {
+    GlobalKey key = GlobalKey();
     late Widget item;
     final type = config['type'];
 
     if (type != 'group' && type != 'row') {
       String field = getField(config);
+      _keys[field] = key;
       dynamic value = config['value'];
       if (type == 'switch') {
         _setFieldValue(field, value ?? false);
@@ -94,23 +105,24 @@ class JsonGenFormState extends State<JsonGenForm>
       case 'password':
       case 'textarea':
       case 'number':
-        item = InputControl(data: config, onChanged: _onChanged);
+        item = InputControl(key: key, data: config, onChanged: _onChanged);
       case 'select':
-        item = SelectControl(data: config, onChanged: _onChanged);
+        item = SelectControl(key: key, data: config, onChanged: _onChanged);
       case 'cascade':
-        item = CascadeControl(data: config, onChanged: _onChanged);
+        item = CascadeControl(key: key, data: config, onChanged: _onChanged);
       case 'radio':
-        item = RadioControl(data: config, onChanged: _onChanged);
+        item = RadioControl(key: key, data: config, onChanged: _onChanged);
       case 'checkbox':
-        item = CheckboxControl(data: config, onChanged: _onChanged);
+        item = CheckboxControl(key: key, data: config, onChanged: _onChanged);
       case 'switch':
-        item = SwitchControl(data: config, onChanged: _onChanged);
+        item = SwitchControl(key: key, data: config, onChanged: _onChanged);
       case 'date':
       case 'time':
       case 'datetime':
-        item = DatetimeControl(data: config, onChanged: _onChanged);
+        item = DatetimeControl(key: key, data: config, onChanged: _onChanged);
       case 'media':
         item = MediaControl(
+          key: key,
           data: config,
           onChanged: _onChanged,
           uploadFile: widget.uploadFile,
@@ -190,5 +202,31 @@ class JsonGenFormState extends State<JsonGenForm>
   @override
   void setFieldValue(String field, dynamic value) {
     _setFieldValue(field, value);
+    final state = _keys[field]?.currentState as ControlInterface;
+    state.setValue(value);
+  }
+
+  @override
+  void setValues(dynamic values) {
+    _getControlField(values, '', (String field, dynamic value) {
+      final state = _keys[field]?.currentState as ControlInterface;
+      state.setValue(value);
+    });
+  }
+
+  /// 递归获取控件字段
+  void _getControlField(
+    Map<String, dynamic> obj,
+    String path,
+    Function callback,
+  ) {
+    obj.forEach((key, value) {
+      var fullPath = path.isEmpty ? key : '$path.$key';
+      if (value is Map<String, dynamic>) {
+        _getControlField(value, fullPath, callback);
+      } else {
+        callback(fullPath, value);
+      }
+    });
   }
 }

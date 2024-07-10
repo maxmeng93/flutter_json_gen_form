@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
 import '../utils/utils.dart';
+import './abstract.dart' show ControlInterface;
 
 class CascadeControl extends StatefulWidget {
   final dynamic data;
@@ -17,7 +18,9 @@ class CascadeControl extends StatefulWidget {
   State<CascadeControl> createState() => _CascadeControlState();
 }
 
-class _CascadeControlState extends State<CascadeControl> {
+class _CascadeControlState extends State<CascadeControl>
+    implements ControlInterface {
+  final GlobalKey _key = GlobalKey<FormFieldState>();
   late String field;
   String? label;
   String? placeholder;
@@ -32,6 +35,12 @@ class _CascadeControlState extends State<CascadeControl> {
   void initState() {
     super.initState();
     _initData();
+  }
+
+  @override
+  void setValue(dynamic value) {
+    final state = _key.currentState as FormFieldState;
+    state.didChange(value);
   }
 
   void _initData() {
@@ -86,6 +95,7 @@ class _CascadeControlState extends State<CascadeControl> {
     ThemeData theme = Theme.of(context);
 
     return FormField(
+      key: _key,
       initialValue: initialValue,
       enabled: !disabled,
       builder: (FormFieldState state) {

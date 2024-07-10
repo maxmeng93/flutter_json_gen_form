@@ -4,6 +4,7 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
 import '../utils/utils.dart';
+import './abstract.dart' show ControlInterface;
 
 class DatetimeControl extends StatefulWidget {
   final dynamic data;
@@ -25,7 +26,9 @@ Map<String, String> _formatMap = {
   'datetime': 'yyyy-MM-dd HH:mm:ss',
 };
 
-class _DatetimeControlState extends State<DatetimeControl> {
+class _DatetimeControlState extends State<DatetimeControl>
+    implements ControlInterface {
+  final GlobalKey _key = GlobalKey<FormFieldState>();
   late String type;
   late String field;
   String? label;
@@ -40,6 +43,12 @@ class _DatetimeControlState extends State<DatetimeControl> {
   void initState() {
     super.initState();
     _initData();
+  }
+
+  @override
+  void setValue(dynamic value) {
+    final state = _key.currentState as FormFieldState;
+    state.didChange(value);
   }
 
   void _initData() {
@@ -65,6 +74,7 @@ class _DatetimeControlState extends State<DatetimeControl> {
     ThemeData theme = Theme.of(context);
 
     return FormField(
+      key: _key,
       initialValue: initialValue,
       enabled: !disabled,
       builder: (FormFieldState state) {

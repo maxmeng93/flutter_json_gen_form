@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
 import '../utils/utils.dart';
+import './abstract.dart' show ControlInterface;
 
 class RadioControl extends StatefulWidget {
   final dynamic data;
@@ -17,7 +18,9 @@ class RadioControl extends StatefulWidget {
   State<RadioControl> createState() => _RadioControlState();
 }
 
-class _RadioControlState extends State<RadioControl> {
+class _RadioControlState extends State<RadioControl>
+    implements ControlInterface {
+  final GlobalKey _key = GlobalKey<FormFieldState>();
   late String field;
   String? label;
   dynamic initialValue;
@@ -49,6 +52,12 @@ class _RadioControlState extends State<RadioControl> {
     _initData();
   }
 
+  @override
+  void setValue(dynamic value) {
+    final state = _key.currentState as FormFieldState;
+    state.didChange(value);
+  }
+
   void _initData() {
     setState(() {
       final data = widget.data;
@@ -74,6 +83,7 @@ class _RadioControlState extends State<RadioControl> {
   @override
   Widget build(BuildContext context) {
     return FormField(
+      key: _key,
       initialValue: initialValue,
       builder: (FormFieldState state) {
         return Column(

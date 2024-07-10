@@ -1,6 +1,6 @@
 name: json_gen_form
 description: "Generate Flutter forms using JSON, featuring a variety of built-in form controls, support for validation, custom layouts, custom styles, and unlimited nested form grouping."
-version: 0.2.0
+version: 0.3.0
 repository: "https://github.com/maxmeng93/flutter_json_gen_form"
 
 environment:

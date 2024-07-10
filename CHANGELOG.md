@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Add a `setValues` method to modify the entire form's values.
+
 ## 0.2.0
 
 - Add onChanged parameter

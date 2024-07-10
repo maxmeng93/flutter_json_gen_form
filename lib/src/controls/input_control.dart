@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
 import '../utils/utils.dart';
+import './abstract.dart' show ControlInterface;
 
 enum InputType {
   text,
@@ -43,7 +44,9 @@ class InputControl extends StatefulWidget {
   State<InputControl> createState() => _InputControlState();
 }
 
-class _InputControlState extends State<InputControl> {
+class _InputControlState extends State<InputControl>
+    implements ControlInterface {
+  final GlobalKey _key = GlobalKey<FormFieldState>();
   final FocusNode _focusNode = FocusNode();
   InputType type = InputType.text;
   late String field;
@@ -69,6 +72,12 @@ class _InputControlState extends State<InputControl> {
   void dispose() {
     _focusNode.dispose();
     super.dispose();
+  }
+
+  @override
+  void setValue(dynamic value) {
+    final state = _key.currentState as FormFieldState;
+    state.didChange(value);
   }
 
   void _initData() {
@@ -117,6 +126,7 @@ class _InputControlState extends State<InputControl> {
   @override
   Widget build(BuildContext context) {
     return FormField(
+      key: _key,
       initialValue: initialValue,
       enabled: !disabled,
       validator: (value) {

@@ -5,6 +5,7 @@ import '../widgets/widgets.dart';
 import '../layouts/layouts.dart';
 import '../validator/validator.dart';
 import '../utils/utils.dart';
+import './abstract.dart' show ControlInterface;
 
 class MediaControl extends StatefulWidget {
   final dynamic data;
@@ -22,7 +23,9 @@ class MediaControl extends StatefulWidget {
   State<MediaControl> createState() => _MediaControlState();
 }
 
-class _MediaControlState extends State<MediaControl> {
+class _MediaControlState extends State<MediaControl>
+    implements ControlInterface {
+  final GlobalKey _key = GlobalKey<FormFieldState>();
   late String field;
   String? label;
   dynamic initialValue;
@@ -39,6 +42,12 @@ class _MediaControlState extends State<MediaControl> {
   void initState() {
     super.initState();
     _initData();
+  }
+
+  @override
+  void setValue(dynamic value) {
+    final state = _key.currentState as FormFieldState;
+    state.didChange(value);
   }
 
   void _initData() {
@@ -83,6 +92,7 @@ class _MediaControlState extends State<MediaControl> {
   @override
   Widget build(BuildContext context) {
     return FormField(
+      key: _key,
       initialValue: initialValue,
       builder: (FormFieldState state) {
         return Column(
