@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
 import '../utils/utils.dart';
+import './abstract.dart' show ControlInterface;
 
 class SwitchControl extends StatefulWidget {
   final dynamic data;
@@ -17,7 +18,9 @@ class SwitchControl extends StatefulWidget {
   State<SwitchControl> createState() => _SwitchControlState();
 }
 
-class _SwitchControlState extends State<SwitchControl> {
+class _SwitchControlState extends State<SwitchControl>
+    implements ControlInterface {
+  final GlobalKey _key = GlobalKey<FormFieldState>();
   late String field;
   String? label;
   dynamic initialValue;
@@ -32,6 +35,12 @@ class _SwitchControlState extends State<SwitchControl> {
   void initState() {
     super.initState();
     _initData();
+  }
+
+  @override
+  void setValue(dynamic value) {
+    final state = _key.currentState as FormFieldState;
+    state.didChange(value);
   }
 
   void _initData() {
@@ -53,6 +62,7 @@ class _SwitchControlState extends State<SwitchControl> {
   @override
   Widget build(BuildContext context) {
     return FormField(
+      key: _key,
       initialValue: initialValue,
       builder: (FormFieldState state) {
         return Column(

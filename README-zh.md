@@ -8,6 +8,145 @@
 
 </div>
 
+## 功能
+
+- 使用 json 渲染表单
+- 表单验证
+- 自定义表单样式
+- 自定义布局（row, col）
+- 表单无限分组嵌套（group）
+- 通过方法修改整个表单值或单个表单控件值
+- 表单控件
+  - 文本框
+  - 密码框
+  - 多行文本框
+  - 数字
+  - 单选框
+  - 复选框
+  - 下拉框
+  - 开关
+  - 多媒体上传
+  - 日期选择
+  - 时间选择
+  - 日期时间选择
+
+## 使用
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:json_gen_form/json_gen_form.dart';
+
+void main() {
+  runApp(const MainApp());
+}
+
+class MainApp extends StatefulWidget {
+  const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  final GlobalKey _key = GlobalKey<JsonGenFormState>();
+  final List<dynamic> _data = [
+    {
+      "type": "text",
+      "field": "name",
+      "label": "姓名",
+      "value": "隔壁老王",
+      "placeholder": "请输入姓名",
+      "rules": [
+        {"required": true, "message": "请输入姓名"}
+      ]
+    },
+    {
+      "type": "textarea",
+      "field": "remark",
+      "label": "自我介绍",
+      "value": null,
+      "placeholder": "请简单介绍一下你自己",
+      "rules": []
+    },
+    {
+      "type": "number",
+      "field": "age",
+      "label": "年龄",
+      "value": null,
+      "placeholder": "请输入年龄",
+      "rules": [
+        {"required": true, "message": "请输入年龄"},
+        {"min": 18, "message": "年龄必须大于18岁"}
+      ]
+    }
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        brightness: Brightness.light,
+        useMaterial3: true,
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('json gen form'),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 20.0,
+            ),
+            child: Column(
+              children: [
+                JsonGenForm(
+                  key: _key,
+                  config: _data,
+                  decoration: JsonGenFormDecoration(
+                    // groupLabelWrap: (Widget child, dynamic data) {
+                    //   return Container(
+                    //     margin: const EdgeInsets.only(bottom: 5),
+                    //     child: child,
+                    //   );
+                    // },
+                    controlLabelWrap: (Widget child, dynamic data) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 5),
+                        child: child,
+                      );
+                    },
+                    controlWrap: (Widget child, dynamic data) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        child: child,
+                      );
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final formState = _key.currentState as JsonGenFormState;
+                    try {
+                      final data = await formState.validate();
+                      debugPrint('表单验证成功: $data');
+                    } catch (e) {
+                      debugPrint('表单验证失败: $e');
+                    }
+                  },
+                  child: const Text('提交'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
 ## 通用参数
 
 除 `group`、`row`、`col` 外，其他类型都有以下通用参数。所有类型都有 `extra`。

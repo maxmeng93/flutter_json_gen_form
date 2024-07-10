@@ -9,6 +9,145 @@ English · [中文](./README-zh.md)
 
 </div>
 
+## Features
+
+- Render form using JSON
+- Form validation
+- Custom form styles
+- Custom layouts (row, col)
+- Infinite form grouping and nesting (group)
+- Modify entire form values or individual form control values through methods
+- Form controls:
+  - Text box
+  - Password box
+  - Textarea
+  - Number
+  - Radio button
+  - Checkbox
+  - Dropdown
+  - Switch
+  - Multimedia upload
+  - Date picker
+  - Time picker
+  - DateTime picker
+
+## Usage
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:json_gen_form/json_gen_form.dart';
+
+void main() {
+  runApp(const MainApp());
+}
+
+class MainApp extends StatefulWidget {
+  const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  final GlobalKey _key = GlobalKey<JsonGenFormState>();
+  final List<dynamic> _data = [
+    {
+      "type": "text",
+      "field": "name",
+      "label": "姓名",
+      "value": "隔壁老王",
+      "placeholder": "请输入姓名",
+      "rules": [
+        {"required": true, "message": "请输入姓名"}
+      ]
+    },
+    {
+      "type": "textarea",
+      "field": "remark",
+      "label": "自我介绍",
+      "value": null,
+      "placeholder": "请简单介绍一下你自己",
+      "rules": []
+    },
+    {
+      "type": "number",
+      "field": "age",
+      "label": "年龄",
+      "value": null,
+      "placeholder": "请输入年龄",
+      "rules": [
+        {"required": true, "message": "请输入年龄"},
+        {"min": 18, "message": "年龄必须大于18岁"}
+      ]
+    }
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        brightness: Brightness.light,
+        useMaterial3: true,
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('json gen form'),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 20.0,
+            ),
+            child: Column(
+              children: [
+                JsonGenForm(
+                  key: _key,
+                  config: _data,
+                  decoration: JsonGenFormDecoration(
+                    // groupLabelWrap: (Widget child, dynamic data) {
+                    //   return Container(
+                    //     margin: const EdgeInsets.only(bottom: 5),
+                    //     child: child,
+                    //   );
+                    // },
+                    controlLabelWrap: (Widget child, dynamic data) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 5),
+                        child: child,
+                      );
+                    },
+                    controlWrap: (Widget child, dynamic data) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        child: child,
+                      );
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final formState = _key.currentState as JsonGenFormState;
+                    try {
+                      final data = await formState.validate();
+                      debugPrint('Validation success $data');
+                    } catch (e) {
+                      debugPrint('Validation error: $e');
+                    }
+                  },
+                  child: const Text('Submit'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
 ## General Parameters
 
 Except for `group`, `row`, and `col`, all types have the following general parameters. All types have `extra`.

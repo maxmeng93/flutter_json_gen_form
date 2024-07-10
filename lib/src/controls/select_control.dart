@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import '../validator/validator.dart';
 import '../utils/utils.dart';
+import './abstract.dart' show ControlInterface;
 
 class SelectControl extends StatefulWidget {
   final dynamic data;
@@ -17,7 +18,9 @@ class SelectControl extends StatefulWidget {
   State<SelectControl> createState() => _SelectControlState();
 }
 
-class _SelectControlState extends State<SelectControl> {
+class _SelectControlState extends State<SelectControl>
+    implements ControlInterface {
+  final GlobalKey _key = GlobalKey<FormFieldState>();
   late String field;
   String? label;
   String? placeholder;
@@ -37,6 +40,12 @@ class _SelectControlState extends State<SelectControl> {
   void initState() {
     super.initState();
     _initData();
+  }
+
+  @override
+  void setValue(dynamic value) {
+    final state = _key.currentState as FormFieldState;
+    state.didChange(value);
   }
 
   void _initData() {
@@ -69,6 +78,7 @@ class _SelectControlState extends State<SelectControl> {
         .toList();
 
     return FormField(
+      key: _key,
       initialValue: initialValue,
       enabled: !disabled,
       builder: (FormFieldState state) {
